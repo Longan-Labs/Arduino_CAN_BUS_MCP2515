@@ -258,16 +258,16 @@ void MCP_CAN::mcp2515_initCANBuffers(void)
     INT32U ulMask = 0x00, ulFilt = 0x00;
 
 
-    mcp2515_write_id(MCP_RXM0SIDH, ext, ulMask);
-    mcp2515_write_id(MCP_RXM1SIDH, ext, ulMask);
+    mcp2515_write_id(MCP_RXM0SIDH, 0, ulMask);
+    mcp2515_write_id(MCP_RXM1SIDH, 1, ulMask);
                                                                         /* Anyway, set all filters to 0 */
                                                                         /* :                            */
-    mcp2515_write_id(MCP_RXF0SIDH, ext, ulFilt);                        /* RXB0: extended               */
-    mcp2515_write_id(MCP_RXF1SIDH, ext, ulFilt);                        /* AND standard                 */
-    mcp2515_write_id(MCP_RXF2SIDH, ext, ulFilt);                        /* RXB1: extended               */
-    mcp2515_write_id(MCP_RXF3SIDH, ext, ulFilt);                        /* AND standard                 */
-    mcp2515_write_id(MCP_RXF4SIDH, ext, ulFilt);
-    mcp2515_write_id(MCP_RXF5SIDH, ext, ulFilt);
+    mcp2515_write_id(MCP_RXF0SIDH, 0, ulFilt);                        /* RXB0: extended               */
+    mcp2515_write_id(MCP_RXF1SIDH, 0, ulFilt);                        /* AND standard                 */
+    mcp2515_write_id(MCP_RXF2SIDH, 0, ulFilt);                        /* RXB1: extended               */
+    mcp2515_write_id(MCP_RXF3SIDH, 1, ulFilt);                        /* AND standard                 */
+    mcp2515_write_id(MCP_RXF4SIDH, 1, ulFilt);
+    mcp2515_write_id(MCP_RXF5SIDH, 1, ulFilt);
 
                                                                         /* Clear, deactivate the three  */
                                                                         /* transmit buffers             */
