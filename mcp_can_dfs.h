@@ -244,6 +244,10 @@
 /*
  *  speed 16M
  */
+#define MCP_16MHz_1000kBPS_CFG1 (0x00)
+#define MCP_16MHz_1000kBPS_CFG2 (0x90)
+#define MCP_16MHz_1000kBPS_CFG3 (0x02)
+
 #define MCP_16MHz_500kBPS_CFG1 (0x00)
 #define MCP_16MHz_500kBPS_CFG2 (0xb0)
 #define MCP_16MHz_500kBPS_CFG3 (0x06)
@@ -335,6 +339,7 @@
 #define CAN_200KBPS  9
 #define CAN_250KBPS  10
 #define CAN_500KBPS  11
+#define CAN_1000KBPS 12
 
 #define CAN_OK         (0)
 #define CAN_FAILINIT   (1)
