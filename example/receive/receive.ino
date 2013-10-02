@@ -12,7 +12,7 @@ void setup()
   Serial.begin(115200);
   CAN.begin(CAN_500KBPS);                       // init can bus : baudrate = 500k 
   pinMode(2, INPUT);                            // Setting pin 2 for /INT input
-  Serial.println("MCP2515 Library Receive Example...")
+  Serial.println("MCP2515 Library Receive Example...");
 }
 
 void loop()
