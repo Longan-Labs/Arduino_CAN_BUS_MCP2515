@@ -392,17 +392,17 @@ void MCP_CAN::mcp2515_write_id( const INT8U mcp_addr, const INT8U ext, const INT
     if ( ext == 1) 
     {
         tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
-        tbufdata[MCP_EID8] = (INT8U) (canid / 256);
-        canid = (uint16_t)( id / 0x10000L );
+        tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
+        canid = (uint16_t)(id >> 16);
         tbufdata[MCP_SIDL] = (INT8U) (canid & 0x03);
-        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x1C )*8);
+        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x1C) << 3);
         tbufdata[MCP_SIDL] |= MCP_TXB_EXIDE_M;
-        tbufdata[MCP_SIDH] = (INT8U) (canid / 32 );
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 5 );
     }
     else 
     {
-        tbufdata[MCP_SIDH] = (INT8U) (canid / 8 );
-        tbufdata[MCP_SIDL] = (INT8U) ((canid & 0x07 )<<5);
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 3 );
+        tbufdata[MCP_SIDL] = (INT8U) ((canid & 0x07 ) << 5);
         tbufdata[MCP_EID0] = 0;
         tbufdata[MCP_EID8] = 0;
     }
