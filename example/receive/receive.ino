@@ -2,36 +2,36 @@
 #include <mcp_can.h>
 #include <SPI.h>
 
-unsigned char Flag_Recv = 0;
+long unsigned int rxId;
 unsigned char len = 0;
-unsigned char buf[8];
-char str[20];
+unsigned char rxBuf[8];
+
 
 void setup()
 {
-  CAN.begin(CAN_500KBPS);                       // init can bus : baudrate = 500k
-  attachInterrupt(0, MCP2515_ISR, FALLING);     // start interrupt
   Serial.begin(115200);
-}
-
-void MCP2515_ISR()
-{
-    Flag_Recv = 1;
+  CAN.begin(CAN_500KBPS);                       // init can bus : baudrate = 500k 
+  pinMode(2, INPUT);                            // Setting pin 2 for /INT input
+  Serial.println("MCP2515 Library Receive Example...");
 }
 
 void loop()
 {
-    if(Flag_Recv)                           // check if get data
+    if(!digitalRead(2))                         // If pin 2 is low, read receive buffer
     {
-      Flag_Recv = 0;                        // clear flag
-      CAN.readMsgBuf(&len, buf);            // read data,  len: data length, buf: data buf
-      Serial.println("CAN_BUS GET DATA!");
-      Serial.print("data len = ");
-      Serial.println(len);
-      
-      for(int i = 0; i<len; i++)            // print the data
+      CAN.readMsgBuf(&len, rxBuf);              // Read data: len = data length, buf = data byte(s)
+      rxId = CAN.getCanId();                    // Get message ID
+      Serial.print("ID: ");
+      Serial.print(rxId, HEX);
+      Serial.print("  Data: ");
+      for(int i = 0; i<len; i++)                // Print each byte of the data
       {
-        Serial.print(buf[i]);Serial.print("\t");
+        if(rxBuf[i] < 0x10)                     // If data byte is less than 0x10, add a leading zero
+        {
+          Serial.print("0");
+        }
+        Serial.print(rxBuf[i], HEX);
+        Serial.print(" ");
       }
       Serial.println();
     }

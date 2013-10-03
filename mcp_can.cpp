@@ -259,21 +259,22 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed)
 void MCP_CAN::mcp2515_initCANBuffers(void)
 {
     INT8U i, a1, a2, a3;
-                   
-    INT8U ext = 0;
+    
+    INT8U std = 0;               
+    INT8U ext = 1;
     INT32U ulMask = 0x00, ulFilt = 0x00;
 
 
-    mcp2515_write_id(MCP_RXM0SIDH, 0, ulMask);
-    mcp2515_write_id(MCP_RXM1SIDH, 1, ulMask);
-                                                                        /* Anyway, set all filters to 0 */
-                                                                        /* :                            */
-    mcp2515_write_id(MCP_RXF0SIDH, 0, ulFilt);                        /* RXB0: extended               */
-    mcp2515_write_id(MCP_RXF1SIDH, 0, ulFilt);                        /* AND standard                 */
-    mcp2515_write_id(MCP_RXF2SIDH, 0, ulFilt);                        /* RXB1: extended               */
-    mcp2515_write_id(MCP_RXF3SIDH, 1, ulFilt);                        /* AND standard                 */
-    mcp2515_write_id(MCP_RXF4SIDH, 1, ulFilt);
-    mcp2515_write_id(MCP_RXF5SIDH, 1, ulFilt);
+    mcp2515_write_id(MCP_RXM0SIDH, ext, ulMask);			/*Set both masks to 0           */
+    mcp2515_write_id(MCP_RXM1SIDH, ext, ulMask);			/*Mask register ignores ext bit */
+    
+                                                                        /* Set all filters to 0         */
+    mcp2515_write_id(MCP_RXF0SIDH, ext, ulFilt);			/* RXB0: extended               */
+    mcp2515_write_id(MCP_RXF1SIDH, std, ulFilt);			/* RXB1: standard               */
+    mcp2515_write_id(MCP_RXF2SIDH, ext, ulFilt);			/* RXB2: extended               */
+    mcp2515_write_id(MCP_RXF3SIDH, std, ulFilt);			/* RXB3: standard               */
+    mcp2515_write_id(MCP_RXF4SIDH, ext, ulFilt);
+    mcp2515_write_id(MCP_RXF5SIDH, std, ulFilt);
 
                                                                         /* Clear, deactivate the three  */
                                                                         /* transmit buffers             */
@@ -391,17 +392,17 @@ void MCP_CAN::mcp2515_write_id( const INT8U mcp_addr, const INT8U ext, const INT
     if ( ext == 1) 
     {
         tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
-        tbufdata[MCP_EID8] = (INT8U) (canid / 256);
-        canid = (uint16_t)( id / 0x10000L );
+        tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
+        canid = (uint16_t)(id >> 16);
         tbufdata[MCP_SIDL] = (INT8U) (canid & 0x03);
-        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x1C )*8);
+        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x1C) << 3);
         tbufdata[MCP_SIDL] |= MCP_TXB_EXIDE_M;
-        tbufdata[MCP_SIDH] = (INT8U) (canid / 32 );
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 5 );
     }
     else 
     {
-        tbufdata[MCP_SIDH] = (INT8U) (canid / 8 );
-        tbufdata[MCP_SIDL] = (INT8U) ((canid & 0x07 )<<5);
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 3 );
+        tbufdata[MCP_SIDL] = (INT8U) ((canid & 0x07 ) << 5);
         tbufdata[MCP_EID0] = 0;
         tbufdata[MCP_EID8] = 0;
     }
@@ -427,8 +428,8 @@ void MCP_CAN::mcp2515_read_id( const INT8U mcp_addr, INT8U* ext, INT32U* id )
     {
                                                                         /* extended id                  */
         *id = (*id<<2) + (tbufdata[MCP_SIDL] & 0x03);
-        *id <<= 16;
-        *id = *id +(tbufdata[MCP_EID8]<<8) + tbufdata[MCP_EID0];
+        *id = (*id<<8) + tbufdata[MCP_EID8];
+        *id = (*id<<8) + tbufdata[MCP_EID0];
         *ext = 1;
     }
 }
