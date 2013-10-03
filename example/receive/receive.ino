@@ -24,8 +24,12 @@ void loop()
       Serial.print("ID: ");
       Serial.print(rxId, HEX);
       Serial.print("  Data: ");
-      for(int i = 0; i<len; i++)                // print the data
+      for(int i = 0; i<len; i++)                // Print each byte of the data
       {
+        if(rxBuf[i] < 0x10)                     // If data byte is less than 0x10, add a leading zero
+        {
+          Serial.print("0");
+        }
         Serial.print(rxBuf[i], HEX);
         Serial.print(" ");
       }
