@@ -3,7 +3,8 @@
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
 
   Author:Loovee
-  2012-4-24
+  Contributor: Cory J. Fowler
+  2014-1-16
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -31,11 +32,12 @@
 #endif
 
 #ifndef INT8U
-#define INT8U unsigned char
+#define INT8U byte
 #endif
 
 // if print debug information
-#define DEBUG_MODE 1
+#define DEBUG_MODE 0
+
 /*
  *   Begin mt
  */
@@ -246,51 +248,51 @@
  */
 #define MCP_16MHz_1000kBPS_CFG1 (0x00)
 #define MCP_16MHz_1000kBPS_CFG2 (0xD0)
-#define MCP_16MHz_1000kBPS_CFG3 (0x02)
+#define MCP_16MHz_1000kBPS_CFG3 (0x82)
 
 #define MCP_16MHz_500kBPS_CFG1 (0x00)
 #define MCP_16MHz_500kBPS_CFG2 (0xF0)
-#define MCP_16MHz_500kBPS_CFG3 (0x06)
+#define MCP_16MHz_500kBPS_CFG3 (0x86)
 
 #define MCP_16MHz_250kBPS_CFG1 (0x41)
 #define MCP_16MHz_250kBPS_CFG2 (0xF1)
-#define MCP_16MHz_250kBPS_CFG3 (0x05)
+#define MCP_16MHz_250kBPS_CFG3 (0x85)
 
 #define MCP_16MHz_200kBPS_CFG1 (0x01)
 #define MCP_16MHz_200kBPS_CFG2 (0xFA)
-#define MCP_16MHz_200kBPS_CFG3 (0x07)
+#define MCP_16MHz_200kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_125kBPS_CFG1 (0x03)
 #define MCP_16MHz_125kBPS_CFG2 (0xF0)
-#define MCP_16MHz_125kBPS_CFG3 (0x06)
+#define MCP_16MHz_125kBPS_CFG3 (0x86)
 
 #define MCP_16MHz_100kBPS_CFG1 (0x03)
 #define MCP_16MHz_100kBPS_CFG2 (0xFA)
-#define MCP_16MHz_100kBPS_CFG3 (0x07)
+#define MCP_16MHz_100kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_80kBPS_CFG1 (0x03)
 #define MCP_16MHz_80kBPS_CFG2 (0xFF)
-#define MCP_16MHz_80kBPS_CFG3 (0x07)
+#define MCP_16MHz_80kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_50kBPS_CFG1 (0x07)
 #define MCP_16MHz_50kBPS_CFG2 (0xFA)
-#define MCP_16MHz_50kBPS_CFG3 (0x07)
+#define MCP_16MHz_50kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_40kBPS_CFG1 (0x07)
 #define MCP_16MHz_40kBPS_CFG2 (0xFF)
-#define MCP_16MHz_40kBPS_CFG3 (0x07)
+#define MCP_16MHz_40kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_20kBPS_CFG1 (0x0F)
 #define MCP_16MHz_20kBPS_CFG2 (0xFF)
-#define MCP_16MHz_20kBPS_CFG3 (0x07)
+#define MCP_16MHz_20kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_10kBPS_CFG1 (0x1F)
 #define MCP_16MHz_10kBPS_CFG2 (0xFF)
-#define MCP_16MHz_10kBPS_CFG3 (0x07)
+#define MCP_16MHz_10kBPS_CFG3 (0x87)
 
 #define MCP_16MHz_5kBPS_CFG1 (0x3F)
 #define MCP_16MHz_5kBPS_CFG2 (0xFF)
-#define MCP_16MHz_5kBPS_CFG3 (0x07)
+#define MCP_16MHz_5kBPS_CFG3 (0x87)
 
 
 
@@ -301,7 +303,7 @@
 #define MCP_RXBUF_0 (MCP_RXB0SIDH)
 #define MCP_RXBUF_1 (MCP_RXB1SIDH)
 
-#define SPICS 10
+//#define SPICS 10
 #define MCP2515_SELECT()   digitalWrite(SPICS, LOW)
 #define MCP2515_UNSELECT() digitalWrite(SPICS, HIGH)
 
