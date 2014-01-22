@@ -139,8 +139,8 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 *********************************************************************************************************/
 INT8U MCP_CAN::setMode(const INT8U opMode)
 {
-    mcpMode = opMode
-    mcp2515_setCANCTRL_Mode(mcpMode)
+    mcpMode = opMode;
+    mcp2515_setCANCTRL_Mode(mcpMode);
 
 }
 
@@ -176,7 +176,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
     set = 1;
     switch (canClock)
     {
-        case (16MHZ):
+        case (MCP_16MHZ):
         switch (canSpeed) 
         {
             case (CAN_5KBPS):                                             /*   5KBPS                  */
@@ -257,7 +257,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
         }
         break;
         
-        case (20MHZ):
+        case (MCP_20MHZ):
         switch (canSpeed) 
         {
             case (CAN_40KBPS):                                             /*  40KBPS                  */
@@ -425,7 +425,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
 
         switch(canIDMode)
         {
-            case (ANY):
+            case (MCP_ANY):
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
             MCP_RXB_RX_ANY | MCP_RXB_BUKT_MASK);
@@ -433,7 +433,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
             MCP_RXB_RX_ANY);
             break;
 
-            case (STD): 
+            case (MCP_STD): 
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
             MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
@@ -441,7 +441,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
             MCP_RXB_RX_STD);
             break;
 
-            case (EXT): 
+            case (MCP_EXT): 
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
             MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
@@ -449,7 +449,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
             MCP_RXB_RX_EXT);
             break;
 
-            case (STDEXT): 
+            case (MCP_STDEXT): 
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
             MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
