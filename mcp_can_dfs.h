@@ -52,11 +52,6 @@
 #define MCP_DLC_MASK        0x0F                                        /* 4 LSBits                     */
 #define MCP_RTR_MASK        0x40                                        /* (1<<6) Bit 6                 */
 
-#define STDEXT     0                                                    /* Standard and Extended        */
-#define STD        1                                                    /* Standard IDs ONLY            */
-#define EXT        2                                                    /* Extended IDs ONLY            */
-#define ANY        3                                                    /* Disables Masks and Filters   */
-
 #define MCP_RXB_RX_ANY      0x60
 #define MCP_RXB_RX_EXT      0x40
 #define MCP_RXB_RX_STD      0x20
@@ -80,17 +75,17 @@
 #define MCP_RXB_RTR_M       0x40                                        /* In RXBnDLC                   */
 
 #define MCP_STAT_RXIF_MASK   (0x03)
-#define MCP_STAT_RX0IF (1<<0)
-#define MCP_STAT_RX1IF (1<<1)
+#define MCP_STAT_RX0IF       (1<<0)
+#define MCP_STAT_RX1IF       (1<<1)
 
-#define MCP_EFLG_RX1OVR (1<<7)
-#define MCP_EFLG_RX0OVR (1<<6)
-#define MCP_EFLG_TXBO   (1<<5)
-#define MCP_EFLG_TXEP   (1<<4)
-#define MCP_EFLG_RXEP   (1<<3)
-#define MCP_EFLG_TXWAR  (1<<2)
-#define MCP_EFLG_RXWAR  (1<<1)
-#define MCP_EFLG_EWARN  (1<<0)
+#define MCP_EFLG_RX1OVR     (1<<7)
+#define MCP_EFLG_RX0OVR     (1<<6)
+#define MCP_EFLG_TXBO       (1<<5)
+#define MCP_EFLG_TXEP       (1<<4)
+#define MCP_EFLG_RXEP       (1<<3)
+#define MCP_EFLG_TXWAR      (1<<2)
+#define MCP_EFLG_RXWAR      (1<<1)
+#define MCP_EFLG_EWARN      (1<<0)
 #define MCP_EFLG_ERRORMASK  (0xF8)                                      /* 5 MS-Bits                    */
 
 
@@ -187,10 +182,10 @@
 /*
  *   CANCTRL Register Values
  */
-#define MODE_NORMAL     0x00
-#define MODE_SLEEP      0x20
-#define MODE_LOOPBACK   0x40
-#define MODE_LISTENONLY 0x60
+#define MCP_NORMAL     0x00
+#define MCP_SLEEP      0x20
+#define MCP_LOOPBACK   0x40
+#define MCP_LISTENONLY 0x60
 #define MODE_CONFIG     0x80
 #define MODE_POWERUP    0xE0
 #define MODE_MASK       0xE0
@@ -242,9 +237,6 @@
 #define MCP_WAKIF       0x40
 #define MCP_MERRF       0x80
 
-
-#define 16MHZ 1
-#define 20MHZ 0
 
 /*
  *  speed 16M
@@ -370,6 +362,14 @@
 #define CANDEFAULTIDENT    (0x55CC)
 #define CANDEFAULTIDENTEXT (CAN_EXTID)
 
+#define MCP_STDEXT   0                                                  /* Standard and Extended        */
+#define MCP_STD      1                                                  /* Standard IDs ONLY            */
+#define MCP_EXT      2                                                  /* Extended IDs ONLY            */
+#define MCP_ANY      3                                                  /* Disables Masks and Filters   */
+
+#define MCP_20MHZ    0
+#define MCP_16MHZ    1
+
 #define CAN_5KBPS    1
 #define CAN_10KBPS   2
 #define CAN_20KBPS   3
@@ -383,12 +383,12 @@
 #define CAN_500KBPS  11
 #define CAN_1000KBPS 12
 
-#define CAN_OK         (0)
-#define CAN_FAILINIT   (1)
-#define CAN_FAILTX     (2)
-#define CAN_MSGAVAIL   (3)
-#define CAN_NOMSG      (4)
-#define CAN_CTRLERROR  (5)
+#define CAN_OK             (0)
+#define CAN_FAILINIT       (1)
+#define CAN_FAILTX         (2)
+#define CAN_MSGAVAIL       (3)
+#define CAN_NOMSG          (4)
+#define CAN_CTRLERROR      (5)
 #define CAN_GETTXBFTIMEOUT (6)
 #define CAN_SENDMSGTIMEOUT (7)
 #define CAN_FAIL       (0xff)
