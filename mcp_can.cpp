@@ -137,9 +137,9 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 ** Function name: setMode
 ** Descriptions: set control mode via sketch
 *********************************************************************************************************/
-INT8U MCP_CAN::setMode(const INT8U newmode)
+INT8U MCP_CAN::setMode(const INT8U opMode)
 {
-    mcpMode = newmode
+    mcpMode = opMode
     mcp2515_setCANCTRL_Mode(mcpMode)
 
 }
@@ -260,24 +260,6 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
         case (20MHZ):
         switch (canSpeed) 
         {
-            case (CAN_5KBPS):                                             /*   5KBPS                  */
-            cfg1 = MCP_20MHz_5kBPS_CFG1;
-            cfg2 = MCP_20MHz_5kBPS_CFG2;
-            cfg3 = MCP_20MHz_5kBPS_CFG3;
-            break;
-
-            case (CAN_10KBPS):                                             /*  10KBPS                  */
-            cfg1 = MCP_20MHz_10kBPS_CFG1;
-            cfg2 = MCP_20MHz_10kBPS_CFG2;
-            cfg3 = MCP_20MHz_10kBPS_CFG3;
-            break;
-
-            case (CAN_20KBPS):                                             /*  20KBPS                  */
-            cfg1 = MCP_20MHz_20kBPS_CFG1;
-            cfg2 = MCP_20MHz_20kBPS_CFG2;
-            cfg3 = MCP_20MHz_20kBPS_CFG3;
-            break;
-
             case (CAN_40KBPS):                                             /*  40KBPS                  */
             cfg1 = MCP_20MHz_40kBPS_CFG1;
             cfg2 = MCP_20MHz_40kBPS_CFG2;
@@ -406,6 +388,8 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
   INT8U res;
 
     mcp2515_reset();
+    
+    mcpMode = MODE_LISTENONLY;
 
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0)
@@ -439,39 +423,46 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
                                                                         /* interrupt mode               */
         mcp2515_setRegister(MCP_CANINTE, MCP_RX0IF | MCP_RX1IF);
 
-switch(canIDMode);
-{
-    case (ANY):
-        mcp2515_modifyRegister(MCP_RXB0CTRL,
-        MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-        MCP_RXB_RX_ANY | MCP_RXB_BUKT_MASK);
-        mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
-        MCP_RXB_RX_ANY);
-    break;
+        switch(canIDMode)
+        {
+            case (ANY):
+            mcp2515_modifyRegister(MCP_RXB0CTRL,
+            MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
+            MCP_RXB_RX_ANY | MCP_RXB_BUKT_MASK);
+            mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
+            MCP_RXB_RX_ANY);
+            break;
 
-    case (STD): 
-        mcp2515_modifyRegister(MCP_RXB0CTRL,
-        MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-        MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
-        mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
-        MCP_RXB_RX_STD);
-    break;
+            case (STD): 
+            mcp2515_modifyRegister(MCP_RXB0CTRL,
+            MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
+            MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
+            mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
+            MCP_RXB_RX_STD);
+            break;
 
-    case (EXT): 
-        mcp2515_modifyRegister(MCP_RXB0CTRL,
-        MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-        MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
-        mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
-        MCP_RXB_RX_EXT);
-    break;
+            case (EXT): 
+            mcp2515_modifyRegister(MCP_RXB0CTRL,
+            MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
+            MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
+            mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
+            MCP_RXB_RX_EXT);
+            break;
 
-    case (STDEXT): 
-        mcp2515_modifyRegister(MCP_RXB0CTRL,
-        MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-        MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
-        mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
-        MCP_RXB_RX_STDEXT);
-    break;
+            case (STDEXT): 
+            mcp2515_modifyRegister(MCP_RXB0CTRL,
+            MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
+            MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
+            mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
+            MCP_RXB_RX_STDEXT);
+            break;
+    
+            default:
+#if DEBUG_MODE        
+            Serial.print("`Setting ID Mode Failure...\r\n");
+#endif           
+            return MCP2515_FAIL;
+            break;
 }    
 
 
@@ -643,12 +634,12 @@ MCP_CAN::MCP_CAN(INT8U _CS)
 ** Function name:           init
 ** Descriptions:            init can and set speed
 *********************************************************************************************************/
-INT8U MCP_CAN::begin(INT8U speedset)
+INT8U MCP_CAN::begin(INT8U idmodeset, INT8U speedset, INT8U clockset)
 {
     INT8U res;
 
     SPI.begin();
-    res = mcp2515_init(speedset);
+    res = mcp2515_init(idmodeset, speedset, clockset);
     if (res == MCP2515_OK) return CAN_OK;
     else return CAN_FAILINIT;
 }
@@ -867,9 +858,10 @@ INT8U MCP_CAN::readMsg()
 ** Function name:           readMsgBuf
 ** Descriptions:            read message buf
 *********************************************************************************************************/
-INT8U MCP_CAN::readMsgBuf(INT8U *len, INT8U buf[])
+INT8U MCP_CAN::readMsgBuf(INT32U *id, INT8U *len, INT8U buf[])
 {
     readMsg();
+    *id  = m_nID;
     *len = m_nDlc;
     for(int i = 0; i<m_nDlc; i++)
     {
@@ -915,7 +907,7 @@ INT8U MCP_CAN::checkError(void)
 
 /*********************************************************************************************************
 ** Function name:           getCanId
-** Descriptions:            when receive something ,u can get the can id!!
+** Descriptions:            Will be depreciated soon...
 *********************************************************************************************************/
 INT32U MCP_CAN::getCanId(void)
 {
