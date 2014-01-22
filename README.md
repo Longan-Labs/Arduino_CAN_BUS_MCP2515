@@ -1,3 +1,6 @@
+Work In Progress - Library UNTESTED
+==============
+
 MCP2515 Library for Arduino
 ==============
 MCP2515 library v1.5
