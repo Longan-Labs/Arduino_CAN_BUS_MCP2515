@@ -1,6 +1,7 @@
 /*
   mcp_can.h
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
+  2014 Copyright (c) Cory J. Fowler  All Rights Reserved.
 
   Author:Loovee
   Contributor: Cory J. Fowler
@@ -38,7 +39,9 @@ class MCP_CAN
     INT8U   m_nDta[MAX_CHAR_IN_MESSAGE];                            	/* data                         */
     INT8U   m_nRtr;                                                     /* rtr                          */
     INT8U   m_nfilhit;
-    INT8U   SPICS;
+    INT8U   MCPCS;
+    INT8U   mcpMode;
+    
 
 /*
 *  mcp2515 driver function 
@@ -68,14 +71,18 @@ class MCP_CAN
 
     INT8U mcp2515_readStatus(void);                                     /* read mcp2515's Status        */
     INT8U mcp2515_setCANCTRL_Mode(const INT8U newmode);                 /* set mode                     */
-    INT8U mcp2515_configRate(const INT8U canSpeed);                     /* set boadrate                 */
-    INT8U mcp2515_init(const INT8U canSpeed);                           /* mcp2515init                  */
+    INT8U mcp2515_configRate(const INT8U canSpeed,                      /* set baudrate                 */
+                             const INT8U canClock);
+                             
+    INT8U mcp2515_init(const INT8U canIDMode,                           /* mcp2515init                  */
+                       const INT8U canSpeed,
+                       const INT8U canClock);
 
     void mcp2515_write_id( const INT8U mcp_addr,                        /* write can id                 */
                                const INT8U ext,
                                const INT32U id );
 
-    void mcp2515_read_id( const INT8U mcp_addr,                        /* read can id                  */
+    void mcp2515_read_id( const INT8U mcp_addr,                         /* read can id                  */
                                     INT8U* ext,
                                     INT32U* id );
 
@@ -95,14 +102,15 @@ class MCP_CAN
 
 public:
     MCP_CAN(INT8U _CS);
-    INT8U begin(INT8U speedset);                              /* init can                     */
+    INT8U begin(INT8U idmodeset, INT8U speedset, INT8U clockset);   /* init can                     */
     INT8U init_Mask(INT8U num, INT8U ext, INT32U ulData);           /* init Masks                   */
     INT8U init_Filt(INT8U num, INT8U ext, INT32U ulData);           /* init filters                 */
+    INT8U setMode(INT8U opMode);                                    /* Sets operational mode        */
     INT8U sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf);  /* send buf                     */
-    INT8U readMsgBuf(INT8U *len, INT8U *buf);                       /* read buf                     */
+    INT8U readMsgBuf(INT32U *id, INT8U *len, INT8U *buf);           /* read buf                     */
     INT8U checkReceive(void);                                       /* if something received        */
     INT8U checkError(void);                                         /* if something error           */
-    INT32U getCanId(void);                                          /* get can id when receive      */
+    INT32U getCanId(void);                                          /* Will be depreciated soon...  */
 };
 
 extern MCP_CAN CAN;
