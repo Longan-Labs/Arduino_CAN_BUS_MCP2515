@@ -389,7 +389,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
 
     mcp2515_reset();
     
-    mcpMode = MODE_LISTENONLY;
+    mcpMode = MCP_LISTENONLY;
 
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0)
@@ -652,12 +652,12 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
 {
     INT8U res = MCP2515_OK;
 #if DEBUG_MODE
-    Serial.print("Begin to set Mask!!\r\n");
+    Serial.print("Starting to Set Mask!!!\r\n");
 #endif
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0){
 #if DEBUG_MODE
-    Serial.print("Enter setting mode fall\r\n"); 
+    Serial.print("Entering Configuration Mode Failure...\r\n"); 
 #endif
   return res;
 }
@@ -674,12 +674,12 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
     res = mcp2515_setCANCTRL_Mode(mcpMode);
     if(res > 0){
 #if DEBUG_MODE
-    Serial.print("Enter normal mode fall\r\n"); 
+    Serial.print("Entering Previous Mode Failure...\r\nSetting Mask Failure...\r\n"); 
 #endif
     return res;
   }
 #if DEBUG_MODE
-    Serial.print("set Mask success!!\r\n");
+    Serial.print("Setting Mask Successful!!!\r\n");
 #endif
     return res;
 }
@@ -692,13 +692,13 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
 {
     INT8U res = MCP2515_OK;
 #if DEBUG_MODE
-    Serial.print("Begin to set Filter!!\r\n");
+    Serial.print("Starting to Set Filter!!!\r\n");
 #endif
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0)
     {
 #if DEBUG_MODE
-      Serial.print("Enter setting mode fall\r\n"); 
+      Serial.print("Enter Configuration Mode Failure...\r\n"); 
 #endif
       return res;
     }
@@ -737,12 +737,12 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
     if(res > 0)
     {
 #if DEBUG_MODE
-      Serial.print("Enter normal mode fall\r\nSet filter fail!!\r\n"); 
+      Serial.print("Entering Previous Mode Failure...\r\nSetting Filter Failure...\r\n"); 
 #endif
       return res;
     }
 #if DEBUG_MODE
-    Serial.print("set Filter success!!\r\n");
+    Serial.print("Setting Filter Successfull!!!\r\n");
 #endif
     
     return res;
