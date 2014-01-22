@@ -1,6 +1,7 @@
 /*
   mcp_can_dfs.h
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
+  2014 Copyright (c) Cory J. Fowler  All Rights Reserved.
 
   Author:Loovee
   Contributor: Cory J. Fowler
@@ -36,7 +37,7 @@
 #endif
 
 // if print debug information
-#define DEBUG_MODE 0
+#define DEBUG_MODE 1
 
 /*
  *   Begin mt
@@ -50,6 +51,11 @@
 #define MCP_TXB_EXIDE_M     0x08                                        /* In TXBnSIDL                  */
 #define MCP_DLC_MASK        0x0F                                        /* 4 LSBits                     */
 #define MCP_RTR_MASK        0x40                                        /* (1<<6) Bit 6                 */
+
+#define STDEXT     0                                                    /* Standard and Extended        */
+#define STD        1                                                    /* Standard IDs ONLY            */
+#define EXT        2                                                    /* Extended IDs ONLY            */
+#define ANY        3                                                    /* Disables Masks and Filters   */
 
 #define MCP_RXB_RX_ANY      0x60
 #define MCP_RXB_RX_EXT      0x40
@@ -91,7 +97,6 @@
 /*
  *   Define MCP2515 register addresses
  */
-
 #define MCP_RXF0SIDH    0x00
 #define MCP_RXF0SIDL    0x01
 #define MCP_RXF0EID8    0x02
@@ -154,7 +159,6 @@
 /*
  *   Define SPI Instruction Set
  */
-
 #define MCP_WRITE           0x02
 
 #define MCP_READ            0x03
@@ -183,7 +187,6 @@
 /*
  *   CANCTRL Register Values
  */
-
 #define MODE_NORMAL     0x00
 #define MODE_SLEEP      0x20
 #define MODE_LOOPBACK   0x40
@@ -204,7 +207,6 @@
 /*
  *   CNF1 Register Values
  */
-
 #define SJW1            0x00
 #define SJW2            0x40
 #define SJW3            0x80
@@ -214,7 +216,6 @@
 /*
  *   CNF2 Register Values
  */
-
 #define BTLMODE         0x80
 #define SAMPLE_1X       0x00
 #define SAMPLE_3X       0x40
@@ -223,7 +224,6 @@
 /*
  *   CNF3 Register Values
  */
-
 #define SOF_ENABLE      0x80
 #define SOF_DISABLE     0x00
 #define WAKFIL_ENABLE   0x40
@@ -233,7 +233,6 @@
 /*
  *   CANINTF Register Bits
  */
-
 #define MCP_RX0IF       0x01
 #define MCP_RX1IF       0x02
 #define MCP_TX0IF       0x04
@@ -242,6 +241,10 @@
 #define MCP_ERRIF       0x20
 #define MCP_WAKIF       0x40
 #define MCP_MERRF       0x80
+
+
+#define 16MHZ 1
+#define 20MHZ 0
 
 /*
  *  speed 16M
@@ -294,6 +297,44 @@
 #define MCP_16MHz_5kBPS_CFG2 (0xFF)
 #define MCP_16MHz_5kBPS_CFG3 (0x87)
 
+/*
+ *  speed 20M
+ */
+#define MCP_20MHz_1000kBPS_CFG1 (0x00)
+#define MCP_20MHz_1000kBPS_CFG2 (0xD9)
+#define MCP_20MHz_1000kBPS_CFG3 (0x82)
+
+#define MCP_20MHz_500kBPS_CFG1 (0x00)
+#define MCP_20MHz_500kBPS_CFG2 (0xFA)
+#define MCP_20MHz_500kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_250kBPS_CFG1 (0x41)
+#define MCP_20MHz_250kBPS_CFG2 (0xFB)
+#define MCP_20MHz_250kBPS_CFG3 (0x86)
+
+#define MCP_20MHz_200kBPS_CFG1 (0x01)
+#define MCP_20MHz_200kBPS_CFG2 (0xFF)
+#define MCP_20MHz_200kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_125kBPS_CFG1 (0x03)
+#define MCP_20MHz_125kBPS_CFG2 (0xFA)
+#define MCP_20MHz_125kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_100kBPS_CFG1 (0x04)
+#define MCP_20MHz_100kBPS_CFG2 (0xFA)
+#define MCP_20MHz_100kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_80kBPS_CFG1 (0x04)
+#define MCP_20MHz_80kBPS_CFG2 (0xFF)
+#define MCP_20MHz_80kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_50kBPS_CFG1 (0x09)
+#define MCP_20MHz_50kBPS_CFG2 (0xFA)
+#define MCP_20MHz_50kBPS_CFG3 (0x87)
+
+#define MCP_20MHz_40kBPS_CFG1 (0x09)
+#define MCP_20MHz_40kBPS_CFG2 (0xFF)
+#define MCP_20MHz_40kBPS_CFG3 (0x87)
 
 
 #define MCPDEBUG        (0)
@@ -303,9 +344,8 @@
 #define MCP_RXBUF_0 (MCP_RXB0SIDH)
 #define MCP_RXBUF_1 (MCP_RXB1SIDH)
 
-//#define SPICS 10
-#define MCP2515_SELECT()   digitalWrite(SPICS, LOW)
-#define MCP2515_UNSELECT() digitalWrite(SPICS, HIGH)
+#define MCP2515_SELECT()   digitalWrite(MCPCS, LOW)
+#define MCP2515_UNSELECT() digitalWrite(MCPCS, HIGH)
 
 #define MCP2515_OK         (0)
 #define MCP2515_FAIL       (1)
