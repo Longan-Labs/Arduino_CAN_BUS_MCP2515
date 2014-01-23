@@ -1,4 +1,4 @@
-Work In Progress - Library UNTESTED
+Work In Progress - Library Seems to Work...
 ==============
 
 MCP2515 Library for Arduino
