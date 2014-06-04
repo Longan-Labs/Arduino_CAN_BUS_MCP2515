@@ -88,7 +88,6 @@ class MCP_CAN
 
     void mcp2515_write_canMsg( const INT8U buffer_sidh_addr );          /* write can msg                */
     void mcp2515_read_canMsg( const INT8U buffer_sidh_addr);            /* read can msg                 */
-    void mcp2515_start_transmit(const INT8U mcp_addr);                  /* start transmit               */
     INT8U mcp2515_getNextFreeTXBuf(INT8U *txbuf_n);                     /* get Next free txbuf          */
 
 /*
