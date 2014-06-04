@@ -589,15 +589,6 @@ void MCP_CAN::mcp2515_read_canMsg( const INT8U buffer_sidh_addr)        /* read 
 ** Function name:           sendMsg
 ** Descriptions:            send message
 *********************************************************************************************************/
-void MCP_CAN::mcp2515_start_transmit(const INT8U mcp_addr)              /* start transmit               */
-{
-    mcp2515_modifyRegister( mcp_addr-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
-}
-
-/*********************************************************************************************************
-** Function name:           sendMsg
-** Descriptions:            send message
-*********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get Next free txbuf          */
 {
     INT8U res, i, ctrlval;
@@ -610,8 +601,8 @@ INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get N
     for (i=0; i<MCP_N_TXBUFFERS; i++) {
         ctrlval = mcp2515_readRegister( ctrlregs[i] );
         if ( (ctrlval & MCP_TXB_TXREQ_M) == 0 ) {
-            *txbuf_n = ctrlregs[i]+1;                                   /* return SIDH-address of Buffe */
-                                                                        /* r                            */
+            *txbuf_n = ctrlregs[i]+1;                                   /* return SIDH-address of Buffer*/
+            
             res = MCP2515_OK;
             return res;                                                 /* ! function exit              */
         }
@@ -800,11 +791,12 @@ INT8U MCP_CAN::sendMsg()
     }
     uiTimeOut = 0;
     mcp2515_write_canMsg( txbuf_n);
-    mcp2515_start_transmit( txbuf_n );
+//    mcp2515_start_transmit( txbuf_n );       // Depreciated this function call, the function calls another function and returns.
+    mcp2515_modifyRegister( txbuf_n-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
     do
     {
         uiTimeOut++;        
-        res1= mcp2515_readRegister(txbuf_n);  			                /* read send buff ctrl reg 	*/
+        res1 = mcp2515_readRegister(txbuf_n-1);                         /* read send buff ctrl reg 	*/
         res1 = res1 & 0x08;                               		
     }while(res1 && (uiTimeOut < TIMEOUTVALUE));   
     if(uiTimeOut == TIMEOUTVALUE)                                       /* send msg timeout             */	
