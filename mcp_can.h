@@ -75,7 +75,7 @@ class MCP_CAN
                                const INT8U ext,
                                const INT32U id );
 
-    void mcp2515_read_id( const INT8U mcp_addr,                        /* read can id                  */
+    void mcp2515_read_id( const INT8U mcp_addr,                         /* read can id                  */
                                     INT8U* ext,
                                     INT32U* id );
 
@@ -105,7 +105,6 @@ public:
     INT32U getCanId(void);                                          /* get can id when receive      */
 };
 
-extern MCP_CAN CAN;
 #endif
 /*********************************************************************************************************
   END FILE

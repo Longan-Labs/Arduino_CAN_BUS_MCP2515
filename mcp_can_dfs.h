@@ -118,8 +118,8 @@
 #define MCP_RXF5SIDL    0x19
 #define MCP_RXF5EID8    0x1A
 #define MCP_RXF5EID0    0x1B
-#define MCP_TEC            0x1C
-#define MCP_REC            0x1D
+#define MCP_TEC         0x1C
+#define MCP_REC         0x1D
 #define MCP_RXM0SIDH    0x20
 #define MCP_RXM0SIDL    0x21
 #define MCP_RXM0EID8    0x22
@@ -131,8 +131,8 @@
 #define MCP_CNF3        0x28
 #define MCP_CNF2        0x29
 #define MCP_CNF1        0x2A
-#define MCP_CANINTE        0x2B
-#define MCP_CANINTF        0x2C
+#define MCP_CANINTE     0x2B
+#define MCP_CANINTF     0x2C
 #define MCP_EFLG        0x2D
 #define MCP_TXB0CTRL    0x30
 #define MCP_TXB1CTRL    0x40
@@ -149,7 +149,7 @@
 #define MCP_NO_INT          0x00                                    // Disable all interrupts
 
 #define MCP_TX01_MASK       0x14
-#define MCP_TX_MASK        0x54
+#define MCP_TX_MASK         0x54
 
 /*
  *   Define SPI Instruction Set
@@ -348,15 +348,15 @@
 #define CAN_500KBPS  12
 #define CAN_1000KBPS 13
 
-#define CAN_OK         (0)
-#define CAN_FAILINIT   (1)
-#define CAN_FAILTX     (2)
-#define CAN_MSGAVAIL   (3)
-#define CAN_NOMSG      (4)
-#define CAN_CTRLERROR  (5)
-#define CAN_GETTXBFTIMEOUT (6)
-#define CAN_SENDMSGTIMEOUT (7)
-#define CAN_FAIL       (0xff)
+#define CAN_OK                  (0)
+#define CAN_FAILINIT            (1)
+#define CAN_FAILTX              (2)
+#define CAN_MSGAVAIL            (3)
+#define CAN_NOMSG               (4)
+#define CAN_CTRLERROR           (5)
+#define CAN_GETTXBFTIMEOUT      (6)
+#define CAN_SENDMSGTIMEOUT      (7)
+#define CAN_FAIL                (0xff)
 
 #define CAN_MAX_CHAR_IN_MESSAGE (8)
 
