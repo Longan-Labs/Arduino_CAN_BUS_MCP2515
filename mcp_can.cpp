@@ -3,7 +3,8 @@
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
 
   Author:Loovee
-  2012-4-24
+  Contributor: Cory J. Fowler
+  2014-1-16
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -24,7 +25,6 @@
 #define spi_readwrite SPI.transfer
 #define spi_read() spi_readwrite(0x00)
 
-MCP_CAN CAN;
 /*********************************************************************************************************
 ** Function name:           mcp2515_reset
 ** Descriptions:            reset the device
@@ -180,6 +180,12 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed)
         cfg1 = MCP_16MHz_20kBPS_CFG1;
         cfg2 = MCP_16MHz_20kBPS_CFG2;
         cfg3 = MCP_16MHz_20kBPS_CFG3;
+        break;
+        
+        case (CAN_31K25BPS):
+        cfg1 = MCP_16MHz_31k25BPS_CFG1;
+        cfg2 = MCP_16MHz_31k25BPS_CFG2;
+        cfg3 = MCP_16MHz_31k25BPS_CFG3;
         break;
 
         case (CAN_40KBPS):
@@ -513,6 +519,17 @@ INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get N
 }
 
 /*********************************************************************************************************
+** Function name:           set CS
+** Descriptions:            init CS pin and set UNSELECTED
+*********************************************************************************************************/
+MCP_CAN::MCP_CAN(INT8U _CS)
+{
+    SPICS = _CS;
+    pinMode(SPICS, OUTPUT);
+    MCP2515_UNSELECT();
+}
+
+/*********************************************************************************************************
 ** Function name:           init
 ** Descriptions:            init can and set speed
 *********************************************************************************************************/
@@ -686,7 +703,7 @@ INT8U MCP_CAN::sendMsg()
     do
     {
         uiTimeOut++;        
-        res1= CAN.mcp2515_readRegister(txbuf_n);  			                /* read send buff ctrl reg 	*/
+        res1= mcp2515_readRegister(txbuf_n);  			                /* read send buff ctrl reg 	*/
         res1 = res1 & 0x08;                               		
     }while(res1 && (uiTimeOut < TIMEOUTVALUE));   
     if(uiTimeOut == TIMEOUTVALUE)                                       /* send msg timeout             */	

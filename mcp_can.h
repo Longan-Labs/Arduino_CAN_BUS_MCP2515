@@ -3,7 +3,8 @@
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
 
   Author:Loovee
-  2012-4-24
+  Contributor: Cory J. Fowler
+  2014-1-16
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -37,6 +38,7 @@ class MCP_CAN
     INT8U   m_nDta[MAX_CHAR_IN_MESSAGE];                            	/* data                         */
     INT8U   m_nRtr;                                                     /* rtr                          */
     INT8U   m_nfilhit;
+    INT8U   SPICS;
 
 /*
 *  mcp2515 driver function 
@@ -90,7 +92,9 @@ class MCP_CAN
     INT8U clearMsg();                                               /* clear all message to zero    */
     INT8U readMsg();                                                /* read message                 */
     INT8U sendMsg();                                                /* send message                 */
+
 public:
+    MCP_CAN(INT8U _CS);
     INT8U begin(INT8U speedset);                              /* init can                     */
     INT8U init_Mask(INT8U num, INT8U ext, INT32U ulData);           /* init Masks                   */
     INT8U init_Filt(INT8U num, INT8U ext, INT32U ulData);           /* init filters                 */

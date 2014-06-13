@@ -2,7 +2,6 @@ MCP2515 Library for Arduino
 ==============
 MCP2515 library v1.1
 This library is compatible with any shield or CAN interface that uses the MCP2515 CAN protocol controller.
-This library assumes /CS is connected to Arduino pin 10 (SS).
 Baudrates 5k, 10k, 20k, 50k, 100k, 125k, 250k, 500k, & 1000k are confirmed to work using a Peak-System PCAN-USB dongle as a reference.
 
 Installation
