@@ -436,7 +436,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
             case (MCP_STD): 
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-            MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
+            MCP_RXB_RX_STD | MCP_RXB_BUKT_MASK );
             mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
             MCP_RXB_RX_STD);
             break;
@@ -444,7 +444,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
             case (MCP_EXT): 
             mcp2515_modifyRegister(MCP_RXB0CTRL,
             MCP_RXB_RX_MASK | MCP_RXB_BUKT_MASK,
-            MCP_RXB_RX_STDEXT | MCP_RXB_BUKT_MASK );
+            MCP_RXB_RX_EXT | MCP_RXB_BUKT_MASK );
             mcp2515_modifyRegister(MCP_RXB1CTRL, MCP_RXB_RX_MASK,
             MCP_RXB_RX_EXT);
             break;
@@ -791,7 +791,6 @@ INT8U MCP_CAN::sendMsg()
     }
     uiTimeOut = 0;
     mcp2515_write_canMsg( txbuf_n);
-//    mcp2515_start_transmit( txbuf_n );       // Depreciated this function call, the function calls another function and returns.
     mcp2515_modifyRegister( txbuf_n-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
     do
     {
