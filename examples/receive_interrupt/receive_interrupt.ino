@@ -1,6 +1,6 @@
 // demo: CAN-BUS Shield, receive data with interrupt mode
 // when in interrupt mode, the data coming can't be too fast, must >20ms, or else you can use check mode
-// loovee, 2016-6-13
+// loovee, 2014-6-13
 
 #include <SPI.h>
 #include "mcp_can.h"

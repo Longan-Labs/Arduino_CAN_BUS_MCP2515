@@ -1,6 +1,6 @@
 // demo: CAN-BUS Shield, receive data with check mode
 // send data coming to fast, such as less than 10ms, you can use this way
-// loovee, 2016-6-13
+// loovee, 2014-6-13
 
 
 #include <SPI.h>
