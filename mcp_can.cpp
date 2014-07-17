@@ -28,7 +28,7 @@
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_reset
-** Descriptions:            reset the device
+** Descriptions:            Performs a software reset
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_reset(void)                                      
 {
@@ -40,7 +40,7 @@ void MCP_CAN::mcp2515_reset(void)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_readRegister
-** Descriptions:            read register
+** Descriptions:            Read data register
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)                                                                     
 {
@@ -57,7 +57,7 @@ INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_readRegisterS
-** Descriptions:            read registerS
+** Descriptions:            Reads sucessive data registers
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const INT8U n)
 {
@@ -75,7 +75,7 @@ void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const I
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_setRegister
-** Descriptions:            set register
+** Descriptions:            Sets data register
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
 {
@@ -84,11 +84,12 @@ void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
     spi_readwrite(address);
     spi_readwrite(value);
     MCP2515_UNSELECT();
+    delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_setRegisterS
-** Descriptions:            set registerS
+** Descriptions:            Sets sucessive data registers
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], const INT8U n)
 {
@@ -102,11 +103,12 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
         spi_readwrite(values[i]);
     }
     MCP2515_UNSELECT();
+    delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_modifyRegister
-** Descriptions:            set bit of one register
+** Descriptions:            Sets specific bits of a register
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_modifyRegister(const INT8U address, const INT8U mask, const INT8U data)
 {
@@ -116,11 +118,12 @@ void MCP_CAN::mcp2515_modifyRegister(const INT8U address, const INT8U mask, cons
     spi_readwrite(mask);
     spi_readwrite(data);
     MCP2515_UNSELECT();
+    delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_readStatus
-** Descriptions:            read mcp2515's Status
+** Descriptions:            Reads status register
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_readStatus(void)                             
 {
@@ -129,24 +132,27 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 	spi_readwrite(MCP_READ_STATUS);
 	i = spi_read();
 	MCP2515_UNSELECT();
-	
 	return i;
 }
 
 /*********************************************************************************************************
-** Function name: setMode
-** Descriptions: set control mode via sketch
+** Function name:           setMode
+** Descriptions:            Sets control mode
 *********************************************************************************************************/
 INT8U MCP_CAN::setMode(const INT8U opMode)
 {
-    mcpMode = opMode;
-    mcp2515_setCANCTRL_Mode(mcpMode);
+    INT8U i;
 
+    mcpMode = opMode;
+
+    i = mcp2515_setCANCTRL_Mode(mcpMode);
+
+    return i;
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_setCANCTRL_Mode
-** Descriptions:            set control mode
+** Descriptions:            Set control mode
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
 {
@@ -163,12 +169,11 @@ INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
     }
 
     return MCP2515_FAIL;
-
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_configRate
-** Descriptions:            set boadrate
+** Descriptions:            Set baudrate
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)            
 {
@@ -176,76 +181,158 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
     set = 1;
     switch (canClock)
     {
+	    // Add support for boards operating at 8MHz 
+	/*
+	case (MCP_8MHZ):
+        switch (canSpeed) 
+        {
+            case (CAN_5KBPS):                                               //   5KBPS                  
+            cfg1 = MCP_8MHz_5kBPS_CFG1;
+            cfg2 = MCP_8MHz_5kBPS_CFG2;
+            cfg3 = MCP_8MHz_5kBPS_CFG3;
+            break;
+
+            case (CAN_10KBPS):                                              //  10KBPS                  
+            cfg1 = MCP_8MHz_10kBPS_CFG1;
+            cfg2 = MCP_8MHz_10kBPS_CFG2;
+            cfg3 = MCP_8MHz_10kBPS_CFG3;
+            break;
+
+            case (CAN_20KBPS):                                              //  20KBPS                  
+            cfg1 = MCP_8MHz_20kBPS_CFG1;
+            cfg2 = MCP_8MHz_20kBPS_CFG2;
+            cfg3 = MCP_8MHz_20kBPS_CFG3;
+            break;
+
+            case (CAN_40KBPS):                                              //  40Kbps
+            cfg1 = MCP_8MHz_40kBPS_CFG1;
+            cfg2 = MCP_8MHz_40kBPS_CFG2;
+            cfg3 = MCP_8MHz_40kBPS_CFG3;
+            break;
+
+            case (CAN_50KBPS):                                              //  50Kbps
+            cfg1 = MCP_8MHz_50kBPS_CFG1;
+            cfg2 = MCP_8MHz_50kBPS_CFG2;
+            cfg3 = MCP_8MHz_50kBPS_CFG3;
+            break;
+
+            case (CAN_80KBPS):                                              //  80Kbps
+            cfg1 = MCP_8MHz_80kBPS_CFG1;
+            cfg2 = MCP_8MHz_80kBPS_CFG2;
+            cfg3 = MCP_8MHz_80kBPS_CFG3;
+            break;
+
+            case (CAN_100KBPS):                                             // 100Kbps
+            cfg1 = MCP_8MHz_100kBPS_CFG1;
+            cfg2 = MCP_8MHz_100kBPS_CFG2;
+            cfg3 = MCP_8MHz_100kBPS_CFG3;
+            break;
+
+            case (CAN_125KBPS):                                             // 125Kbps
+            cfg1 = MCP_8MHz_125kBPS_CFG1;
+            cfg2 = MCP_8MHz_125kBPS_CFG2;
+            cfg3 = MCP_8MHz_125kBPS_CFG3;
+            break;
+
+            case (CAN_200KBPS):                                             // 200Kbps
+            cfg1 = MCP_8MHz_200kBPS_CFG1;
+            cfg2 = MCP_8MHz_200kBPS_CFG2;
+            cfg3 = MCP_8MHz_200kBPS_CFG3;
+            break;
+
+            case (CAN_250KBPS):                                             // 250Kbps
+            cfg1 = MCP_8MHz_250kBPS_CFG1;
+            cfg2 = MCP_8MHz_250kBPS_CFG2;
+            cfg3 = MCP_8MHz_250kBPS_CFG3;
+            break;
+
+            case (CAN_500KBPS):                                             // 500Kbps
+            cfg1 = MCP_8MHz_500kBPS_CFG1;
+            cfg2 = MCP_8MHz_500kBPS_CFG2;
+            cfg3 = MCP_8MHz_500kBPS_CFG3;
+            break;
+        
+            case (CAN_1000KBPS):                                            //   1Mbps
+            cfg1 = MCP_8MHz_1000kBPS_CFG1;
+            cfg2 = MCP_8MHz_1000kBPS_CFG2;
+            cfg3 = MCP_8MHz_1000kBPS_CFG3;
+            break;  
+
+            default:
+            set = 0;
+            break;
+        }
+        break;
+	*/
         case (MCP_16MHZ):
         switch (canSpeed) 
         {
-            case (CAN_5KBPS):                                             /*   5KBPS                  */
+            case (CAN_5KBPS):                                               //   5Kbps
             cfg1 = MCP_16MHz_5kBPS_CFG1;
             cfg2 = MCP_16MHz_5kBPS_CFG2;
             cfg3 = MCP_16MHz_5kBPS_CFG3;
             break;
 
-            case (CAN_10KBPS):                                             /*  10KBPS                  */
+            case (CAN_10KBPS):                                              //  10Kbps
             cfg1 = MCP_16MHz_10kBPS_CFG1;
             cfg2 = MCP_16MHz_10kBPS_CFG2;
             cfg3 = MCP_16MHz_10kBPS_CFG3;
             break;
 
-            case (CAN_20KBPS):                                             /*  20KBPS                  */
+            case (CAN_20KBPS):                                              //  20Kbps
             cfg1 = MCP_16MHz_20kBPS_CFG1;
             cfg2 = MCP_16MHz_20kBPS_CFG2;
             cfg3 = MCP_16MHz_20kBPS_CFG3;
             break;
 
-            case (CAN_40KBPS):                                             /*  40KBPS                  */
+            case (CAN_40KBPS):                                              //  40Kbps
             cfg1 = MCP_16MHz_40kBPS_CFG1;
             cfg2 = MCP_16MHz_40kBPS_CFG2;
             cfg3 = MCP_16MHz_40kBPS_CFG3;
             break;
 
-            case (CAN_50KBPS):                                             /*  50KBPS                  */
-            cfg1 = MCP_16MHz_50kBPS_CFG1;
+            case (CAN_50KBPS):                                              //  50Kbps
             cfg2 = MCP_16MHz_50kBPS_CFG2;
             cfg3 = MCP_16MHz_50kBPS_CFG3;
             break;
 
-            case (CAN_80KBPS):                                             /*  80KBPS                  */
+            case (CAN_80KBPS):                                              //  80Kbps
             cfg1 = MCP_16MHz_80kBPS_CFG1;
             cfg2 = MCP_16MHz_80kBPS_CFG2;
             cfg3 = MCP_16MHz_80kBPS_CFG3;
             break;
 
-            case (CAN_100KBPS):                                             /* 100KBPS                  */
+            case (CAN_100KBPS):                                             // 100Kbps
             cfg1 = MCP_16MHz_100kBPS_CFG1;
             cfg2 = MCP_16MHz_100kBPS_CFG2;
             cfg3 = MCP_16MHz_100kBPS_CFG3;
             break;
 
-            case (CAN_125KBPS):                                             /* 125KBPS                  */
+            case (CAN_125KBPS):                                             // 125Kbps
             cfg1 = MCP_16MHz_125kBPS_CFG1;
             cfg2 = MCP_16MHz_125kBPS_CFG2;
             cfg3 = MCP_16MHz_125kBPS_CFG3;
             break;
 
-            case (CAN_200KBPS):                                             /* 200KBPS                  */
+            case (CAN_200KBPS):                                             // 200Kbps
             cfg1 = MCP_16MHz_200kBPS_CFG1;
             cfg2 = MCP_16MHz_200kBPS_CFG2;
             cfg3 = MCP_16MHz_200kBPS_CFG3;
             break;
 
-            case (CAN_250KBPS):                                             /* 250KBPS                  */
+            case (CAN_250KBPS):                                             // 250Kbps
             cfg1 = MCP_16MHz_250kBPS_CFG1;
             cfg2 = MCP_16MHz_250kBPS_CFG2;
             cfg3 = MCP_16MHz_250kBPS_CFG3;
             break;
 
-            case (CAN_500KBPS):                                             /* 500KBPS                  */
+            case (CAN_500KBPS):                                             // 500Kbps
             cfg1 = MCP_16MHz_500kBPS_CFG1;
             cfg2 = MCP_16MHz_500kBPS_CFG2;
             cfg3 = MCP_16MHz_500kBPS_CFG3;
             break;
         
-            case (CAN_1000KBPS):                                            /*   1MBPS                  */
+            case (CAN_1000KBPS):                                            //   1Mbps
             cfg1 = MCP_16MHz_1000kBPS_CFG1;
             cfg2 = MCP_16MHz_1000kBPS_CFG2;
             cfg3 = MCP_16MHz_1000kBPS_CFG3;
@@ -260,55 +347,55 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
         case (MCP_20MHZ):
         switch (canSpeed) 
         {
-            case (CAN_40KBPS):                                             /*  40KBPS                  */
+            case (CAN_40KBPS):                                              //  40Kbps
             cfg1 = MCP_20MHz_40kBPS_CFG1;
             cfg2 = MCP_20MHz_40kBPS_CFG2;
             cfg3 = MCP_20MHz_40kBPS_CFG3;
             break;
 
-            case (CAN_50KBPS):                                             /*  50KBPS                  */
+            case (CAN_50KBPS):                                              //  50Kbps
             cfg1 = MCP_20MHz_50kBPS_CFG1;
             cfg2 = MCP_20MHz_50kBPS_CFG2;
             cfg3 = MCP_20MHz_50kBPS_CFG3;
             break;
 
-            case (CAN_80KBPS):                                             /*  80KBPS                  */
+            case (CAN_80KBPS):                                              //  80Kbps
             cfg1 = MCP_20MHz_80kBPS_CFG1;
             cfg2 = MCP_20MHz_80kBPS_CFG2;
             cfg3 = MCP_20MHz_80kBPS_CFG3;
             break;
 
-            case (CAN_100KBPS):                                             /* 100KBPS                  */
+            case (CAN_100KBPS):                                             // 100Kbps
             cfg1 = MCP_20MHz_100kBPS_CFG1;
             cfg2 = MCP_20MHz_100kBPS_CFG2;
             cfg3 = MCP_20MHz_100kBPS_CFG3;
             break;
 
-            case (CAN_125KBPS):                                             /* 125KBPS                  */
+            case (CAN_125KBPS):                                             // 125Kbps
             cfg1 = MCP_20MHz_125kBPS_CFG1;
             cfg2 = MCP_20MHz_125kBPS_CFG2;
             cfg3 = MCP_20MHz_125kBPS_CFG3;
             break;
 
-            case (CAN_200KBPS):                                             /* 200KBPS                  */
+            case (CAN_200KBPS):                                             // 200Kbps
             cfg1 = MCP_20MHz_200kBPS_CFG1;
             cfg2 = MCP_20MHz_200kBPS_CFG2;
             cfg3 = MCP_20MHz_200kBPS_CFG3;
             break;
 
-            case (CAN_250KBPS):                                             /* 250KBPS                  */
+            case (CAN_250KBPS):                                             // 250Kbps
             cfg1 = MCP_20MHz_250kBPS_CFG1;
             cfg2 = MCP_20MHz_250kBPS_CFG2;
             cfg3 = MCP_20MHz_250kBPS_CFG3;
             break;
 
-            case (CAN_500KBPS):                                             /* 500KBPS                  */
+            case (CAN_500KBPS):                                             // 500Kbps
             cfg1 = MCP_20MHz_500kBPS_CFG1;
             cfg2 = MCP_20MHz_500kBPS_CFG2;
             cfg3 = MCP_20MHz_500kBPS_CFG3;
             break;
         
-            case (CAN_1000KBPS):                                            /*   1MBPS                  */
+            case (CAN_1000KBPS):                                            //   1Mbps
             cfg1 = MCP_20MHz_1000kBPS_CFG1;
             cfg2 = MCP_20MHz_1000kBPS_CFG2;
             cfg3 = MCP_20MHz_1000kBPS_CFG3;
@@ -338,7 +425,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_initCANBuffers
-** Descriptions:            init canbuffers
+** Descriptions:            Initialize Buffers, Masks, and Filters
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_initCANBuffers(void)
 {
@@ -349,16 +436,16 @@ void MCP_CAN::mcp2515_initCANBuffers(void)
     INT32U ulMask = 0x00, ulFilt = 0x00;
 
 
-    mcp2515_write_id(MCP_RXM0SIDH, ext, ulMask);			/*Set both masks to 0           */
-    mcp2515_write_id(MCP_RXM1SIDH, ext, ulMask);			/*Mask register ignores ext bit */
+    mcp2515_write_mf(MCP_RXM0SIDH, ext, ulMask);			/*Set both masks to 0           */
+    mcp2515_write_mf(MCP_RXM1SIDH, ext, ulMask);			/*Mask register ignores ext bit */
     
                                                                         /* Set all filters to 0         */
-    mcp2515_write_id(MCP_RXF0SIDH, ext, ulFilt);			/* RXB0: extended               */
-    mcp2515_write_id(MCP_RXF1SIDH, std, ulFilt);			/* RXB1: standard               */
-    mcp2515_write_id(MCP_RXF2SIDH, ext, ulFilt);			/* RXB2: extended               */
-    mcp2515_write_id(MCP_RXF3SIDH, std, ulFilt);			/* RXB3: standard               */
-    mcp2515_write_id(MCP_RXF4SIDH, ext, ulFilt);
-    mcp2515_write_id(MCP_RXF5SIDH, std, ulFilt);
+    mcp2515_write_mf(MCP_RXF0SIDH, ext, ulFilt);			/* RXB0: extended               */
+    mcp2515_write_mf(MCP_RXF1SIDH, std, ulFilt);			/* RXB1: standard               */
+    mcp2515_write_mf(MCP_RXF2SIDH, ext, ulFilt);			/* RXB2: extended               */
+    mcp2515_write_mf(MCP_RXF3SIDH, std, ulFilt);			/* RXB3: standard               */
+    mcp2515_write_mf(MCP_RXF4SIDH, ext, ulFilt);
+    mcp2515_write_mf(MCP_RXF5SIDH, std, ulFilt);
 
                                                                         /* Clear, deactivate the three  */
                                                                         /* transmit buffers             */
@@ -380,9 +467,9 @@ void MCP_CAN::mcp2515_initCANBuffers(void)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_init
-** Descriptions:            init the device
+** Descriptions:            Initialize the controller
 *********************************************************************************************************/
-INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const INT8U canClock)             /* mcp2515init      */
+INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const INT8U canClock)
 {
 
   INT8U res;
@@ -475,11 +562,6 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
           return res;
         }
 
-
-#if DEBUG_MODE
-          Serial.print("Returning to Previous Mode Successful!!!\r\n");
-#endif
-
     }
     return res;
 
@@ -487,7 +569,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_write_id
-** Descriptions:            write can id
+** Descriptions:            Write CAN ID
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_write_id( const INT8U mcp_addr, const INT8U ext, const INT32U id )
 {
@@ -513,12 +595,47 @@ void MCP_CAN::mcp2515_write_id( const INT8U mcp_addr, const INT8U ext, const INT
         tbufdata[MCP_EID0] = 0;
         tbufdata[MCP_EID8] = 0;
     }
+    
+    mcp2515_setRegisterS( mcp_addr, tbufdata, 4 );
+}
+
+/*********************************************************************************************************
+** Function name:           mcp2515_write_mf
+** Descriptions:            Write Masks and Filters
+*********************************************************************************************************/
+void MCP_CAN::mcp2515_write_mf( const INT8U mcp_addr, const INT8U ext, const INT32U id )
+{
+    uint16_t canid;
+    INT8U tbufdata[4];
+
+    canid = (uint16_t)(id & 0x0FFFF);
+
+    if ( ext == 1) 
+    {
+        tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
+        tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
+        canid = (uint16_t)(id >> 16);
+        tbufdata[MCP_SIDL] = (INT8U) (canid & 0x03);
+        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x1C) << 3);
+        tbufdata[MCP_SIDL] |= MCP_TXB_EXIDE_M;
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 5 );
+    }
+    else 
+    {
+        tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
+        tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
+        canid = (uint16_t)(id >> 16);
+        tbufdata[MCP_SIDL] = (INT8U) (canid & 0x03);
+        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x07) << 5);
+        tbufdata[MCP_SIDH] = (INT8U) (canid >> 3 );
+    }
+    
     mcp2515_setRegisterS( mcp_addr, tbufdata, 4 );
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_read_id
-** Descriptions:            read can id
+** Descriptions:            Read CAN ID
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_read_id( const INT8U mcp_addr, INT8U* ext, INT32U* id )
 {
@@ -543,7 +660,7 @@ void MCP_CAN::mcp2515_read_id( const INT8U mcp_addr, INT8U* ext, INT32U* id )
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_write_canMsg
-** Descriptions:            write msg
+** Descriptions:            Write message
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_write_canMsg( const INT8U buffer_sidh_addr)
 {
@@ -554,14 +671,14 @@ void MCP_CAN::mcp2515_write_canMsg( const INT8U buffer_sidh_addr)
     {
         m_nDlc |= MCP_RTR_MASK;  
     }
-    mcp2515_setRegister((mcp_addr+4), m_nDlc );                        /* write the RTR and DLC        */
-    mcp2515_write_id(mcp_addr, m_nExtFlg, m_nID );                     /* write CAN id                 */
+    mcp2515_setRegister((mcp_addr+4), m_nDlc );                         /* write the RTR and DLC        */
+    mcp2515_write_id(mcp_addr, m_nExtFlg, m_nID );                      /* write CAN id                 */
 
 }
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_read_canMsg
-** Descriptions:            read message
+** Descriptions:            Read message
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_read_canMsg( const INT8U buffer_sidh_addr)        /* read can msg                 */
 {
@@ -586,8 +703,8 @@ void MCP_CAN::mcp2515_read_canMsg( const INT8U buffer_sidh_addr)        /* read 
 }
 
 /*********************************************************************************************************
-** Function name:           sendMsg
-** Descriptions:            send message
+** Function name:           mcp2515_getNextFreeTXBuf
+** Descriptions:            Send message
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get Next free txbuf          */
 {
@@ -611,8 +728,8 @@ INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get N
 }
 
 /*********************************************************************************************************
-** Function name:           set CS
-** Descriptions:            init CS pin and set UNSELECTED
+** Function name:           MCP_CAN
+** Descriptions:            Public function to declare CAN class and the /CS pin.
 *********************************************************************************************************/
 MCP_CAN::MCP_CAN(INT8U _CS)
 {
@@ -622,8 +739,8 @@ MCP_CAN::MCP_CAN(INT8U _CS)
 }
 
 /*********************************************************************************************************
-** Function name:           init
-** Descriptions:            init can and set speed
+** Function name:           begin
+** Descriptions:            Public function to declare controller initialization parameters.
 *********************************************************************************************************/
 INT8U MCP_CAN::begin(INT8U idmodeset, INT8U speedset, INT8U clockset)
 {
@@ -637,7 +754,7 @@ INT8U MCP_CAN::begin(INT8U idmodeset, INT8U speedset, INT8U clockset)
 
 /*********************************************************************************************************
 ** Function name:           init_Mask
-** Descriptions:            init canid Masks
+** Descriptions:            Public function to set mask(s).
 *********************************************************************************************************/
 INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
 {
@@ -654,11 +771,11 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
 }
     
     if (num == 0){
-        mcp2515_write_id(MCP_RXM0SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXM0SIDH, ext, ulData);
 
     }
     else if(num == 1){
-        mcp2515_write_id(MCP_RXM1SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXM1SIDH, ext, ulData);
     }
     else res =  MCP2515_FAIL;
     
@@ -677,7 +794,7 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
 
 /*********************************************************************************************************
 ** Function name:           init_Filt
-** Descriptions:            init canid filters
+** Descriptions:            Public function to set filter(s).
 *********************************************************************************************************/
 INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
 {
@@ -697,27 +814,27 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
     switch( num )
     {
         case 0:
-        mcp2515_write_id(MCP_RXF0SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF0SIDH, ext, ulData);
         break;
 
         case 1:
-        mcp2515_write_id(MCP_RXF1SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF1SIDH, ext, ulData);
         break;
 
         case 2:
-        mcp2515_write_id(MCP_RXF2SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF2SIDH, ext, ulData);
         break;
 
         case 3:
-        mcp2515_write_id(MCP_RXF3SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF3SIDH, ext, ulData);
         break;
 
         case 4:
-        mcp2515_write_id(MCP_RXF4SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF4SIDH, ext, ulData);
         break;
 
         case 5:
-        mcp2515_write_id(MCP_RXF5SIDH, ext, ulData);
+        mcp2515_write_mf(MCP_RXF5SIDH, ext, ulData);
         break;
 
         default:
@@ -741,7 +858,7 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
 
 /*********************************************************************************************************
 ** Function name:           setMsg
-** Descriptions:            set can message, such as dlc, id, dta[] and so on
+** Descriptions:            Set can message, such as dlc, id, dta[] and so on
 *********************************************************************************************************/
 INT8U MCP_CAN::setMsg(INT32U id, INT8U ext, INT8U len, INT8U *pData)
 {
@@ -756,7 +873,7 @@ INT8U MCP_CAN::setMsg(INT32U id, INT8U ext, INT8U len, INT8U *pData)
 
 /*********************************************************************************************************
 ** Function name:           clearMsg
-** Descriptions:            set all message to zero
+** Descriptions:            Set all messages to zero
 *********************************************************************************************************/
 INT8U MCP_CAN::clearMsg()
 {
@@ -773,7 +890,7 @@ INT8U MCP_CAN::clearMsg()
 
 /*********************************************************************************************************
 ** Function name:           sendMsg
-** Descriptions:            send message
+** Descriptions:            Send message
 *********************************************************************************************************/
 INT8U MCP_CAN::sendMsg()
 {
@@ -791,6 +908,7 @@ INT8U MCP_CAN::sendMsg()
     }
     uiTimeOut = 0;
     mcp2515_write_canMsg( txbuf_n);
+//    mcp2515_start_transmit( txbuf_n );       // Depreciated this function call, the function calls another function and returns.
     mcp2515_modifyRegister( txbuf_n-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
     do
     {
@@ -808,7 +926,7 @@ INT8U MCP_CAN::sendMsg()
 
 /*********************************************************************************************************
 ** Function name:           sendMsgBuf
-** Descriptions:            send buf
+** Descriptions:            Send message to transmitt buffer
 *********************************************************************************************************/
 INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
 {
@@ -818,7 +936,7 @@ INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
 
 /*********************************************************************************************************
 ** Function name:           readMsg
-** Descriptions:            read message
+** Descriptions:            Read message
 *********************************************************************************************************/
 INT8U MCP_CAN::readMsg()
 {
@@ -847,7 +965,7 @@ INT8U MCP_CAN::readMsg()
 
 /*********************************************************************************************************
 ** Function name:           readMsgBuf
-** Descriptions:            read message buf
+** Descriptions:            Public function, Reads message from receive buffer.
 *********************************************************************************************************/
 INT8U MCP_CAN::readMsgBuf(INT32U *id, INT8U *len, INT8U buf[])
 {
@@ -862,7 +980,7 @@ INT8U MCP_CAN::readMsgBuf(INT32U *id, INT8U *len, INT8U buf[])
 
 /*********************************************************************************************************
 ** Function name:           checkReceive
-** Descriptions:            check if got something
+** Descriptions:            Public function, Checks for received data.  (Used if not using the interrupt output)
 *********************************************************************************************************/
 INT8U MCP_CAN::checkReceive(void)
 {
@@ -880,7 +998,7 @@ INT8U MCP_CAN::checkReceive(void)
 
 /*********************************************************************************************************
 ** Function name:           checkError
-** Descriptions:            if something error
+** Descriptions:            Public function, Returns error register data.
 *********************************************************************************************************/
 INT8U MCP_CAN::checkError(void)
 {
@@ -896,14 +1014,6 @@ INT8U MCP_CAN::checkError(void)
     }
 }
 
-/*********************************************************************************************************
-** Function name:           getCanId
-** Descriptions:            Will be depreciated soon...
-*********************************************************************************************************/
-INT32U MCP_CAN::getCanId(void)
-{
-    return m_nID;
-}
 /*********************************************************************************************************
   END FILE
 *********************************************************************************************************/
