@@ -5,7 +5,7 @@
 
   Author: Loovee
   Contributor: Cory J. Fowler
-  2014-1-16
+  2014-9-16
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -181,8 +181,6 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
     set = 1;
     switch (canClock)
     {
-	    // Add support for boards operating at 8MHz 
-	/*
 	case (MCP_8MHZ):
         switch (canSpeed) 
         {
@@ -263,7 +261,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
             break;
         }
         break;
-	*/
+
         case (MCP_16MHZ):
         switch (canSpeed) 
         {
@@ -476,7 +474,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
 
     mcp2515_reset();
     
-    mcpMode = MCP_LISTENONLY;
+    mcpMode = MCP_LOOPBACK;
 
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0)
@@ -625,7 +623,6 @@ void MCP_CAN::mcp2515_write_mf( const INT8U mcp_addr, const INT8U ext, const INT
         tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
         tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
         canid = (uint16_t)(id >> 16);
-        tbufdata[MCP_SIDL] = (INT8U) (canid & 0x03);
         tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x07) << 5);
         tbufdata[MCP_SIDH] = (INT8U) (canid >> 3 );
     }
