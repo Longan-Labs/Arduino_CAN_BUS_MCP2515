@@ -45,9 +45,7 @@ void setup()
   Serial.begin(115200);
   if(CAN0.begin(MCP_STDEXT, CAN_500KBPS, MCP_16MHZ) == CAN_OK) Serial.print("MCP2515 Init Okay!!\r\n");
   else Serial.print("MCP2515 Init Failed!!\r\n");
-  CAN0.setMode(MCP_NORMAL);                // Change to normal mode to allow messages to be transmitted
   pinMode(2, INPUT);                       // Setting pin 2 for /INT input
-
 
   CAN0.init_Mask(0,1,0x00FFFF00);                // Init first mask...
   CAN0.init_Filt(0,1,0x00FFEE00);                // Init first filter...
@@ -60,6 +58,7 @@ void setup()
   CAN0.init_Filt(5,1,0x00FF7700);                // Init sixth filter...
   
   Serial.println("MCP2515 Library Mask & Filter Example...");
+  CAN0.setMode(MCP_NORMAL);                // Change to normal mode to allow messages to be transmitted
 }
 
 void loop()
