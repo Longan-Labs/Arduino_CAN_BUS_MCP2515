@@ -202,6 +202,12 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
             cfg3 = MCP_8MHz_20kBPS_CFG3;
             break;
 
+            case (CAN_31K25BPS):                                            //  31.25KBPS                  
+            cfg1 = MCP_8MHz_31k25BPS_CFG1;
+            cfg2 = MCP_8MHz_31k25BPS_CFG2;
+            cfg3 = MCP_8MHz_31k25BPS_CFG3;
+            break;
+
             case (CAN_40KBPS):                                              //  40Kbps
             cfg1 = MCP_8MHz_40kBPS_CFG1;
             cfg2 = MCP_8MHz_40kBPS_CFG2;
@@ -623,7 +629,7 @@ void MCP_CAN::mcp2515_write_mf( const INT8U mcp_addr, const INT8U ext, const INT
         tbufdata[MCP_EID0] = (INT8U) (canid & 0xFF);
         tbufdata[MCP_EID8] = (INT8U) (canid >> 8);
         canid = (uint16_t)(id >> 16);
-        tbufdata[MCP_SIDL] += (INT8U) ((canid & 0x07) << 5);
+        tbufdata[MCP_SIDL] = (INT8U) ((canid & 0x07) << 5);
         tbufdata[MCP_SIDH] = (INT8U) (canid >> 3 );
     }
     
@@ -905,7 +911,6 @@ INT8U MCP_CAN::sendMsg()
     }
     uiTimeOut = 0;
     mcp2515_write_canMsg( txbuf_n);
-//    mcp2515_start_transmit( txbuf_n );       // Depreciated this function call, the function calls another function and returns.
     mcp2515_modifyRegister( txbuf_n-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
     do
     {
