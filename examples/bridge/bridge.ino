@@ -4,7 +4,7 @@
   First shield should be left default = CS is on D9 and INT is on D2
   Second shield needs modified so CS is on D10 and INT is on D3
   
-  Written by Cory Fowler
+  Written by Cory J. Fowler
   December 09, 2015
 */
 
@@ -38,7 +38,7 @@ void loop()
       CAN0.readMsgBuf(&len, rxBuf);             // Read data: len = data length, buf = data byte(s)
       rxId = CAN0.getCanId();                   // Get message ID
       CAN1.sendMsgBuf(rxId, 1, len, rxBuf);     // Unfortunately this library does not return if the received
-                                                   message was standard or extended. So sending as extended.
+                                                //   message was standard or extended. So sending as extended.
       Serial.println("Received on CAN0");
     }
     
@@ -47,7 +47,7 @@ void loop()
       CAN1.readMsgBuf(&len, rxBuf);             // Read data: len = data length, buf = data byte(s)
       rxId = CAN1.getCanId();                   // Get message ID
       CAN0.sendMsgBuf(rxId, 1, len, rxBuf);     // Unfortunately this library does not return if the received
-                                                   message was standard or extended. So sending as extended.
+                                                //   message was standard or extended. So sending as extended.
       Serial.println("Received on CAN1");
     }
 }
