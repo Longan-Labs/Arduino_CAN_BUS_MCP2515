@@ -1,3 +1,6 @@
+Check out the sub-development branch of this library for additional functionality and support for MCP2515 controllers with 8MHz crystals.
+==============
+
 MCP_CAN Library for Arduino
 ==============
 MCP_CAN library v1.1
