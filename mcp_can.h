@@ -108,12 +108,19 @@ public:
     MCP_CAN(INT8U _CS);
     INT8U begin(INT8U idmodeset, INT8U speedset, INT8U clockset);       // Initilize controller prameters
     INT8U init_Mask(INT8U num, INT8U ext, INT32U ulData);               // Initilize Mask(s)
-    INT8U init_Filt(INT8U num, INT8U ext, INT32U ulData);               // initilize Filter(s)
+    INT8U init_Mask(INT8U num, INT32U ulData);                          // Initilize Mask(s)
+    INT8U init_Filt(INT8U num, INT8U ext, INT32U ulData);               // Initilize Filter(s)
+    INT8U init_Filt(INT8U num, INT32U ulData);                          // Initilize Filter(s)
     INT8U setMode(INT8U opMode);                                        // Set operational mode
     INT8U sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf);      // Send message to transmit buffer
+    INT8U sendMsgBuf(INT32U id, INT8U len, INT8U *buf);                 // Send message to transmit buffer
+    INT8U readMsgBuf(INT32U *id, INT8U *ext, INT8U *len, INT8U *buf);   // Read message from receive buffer
     INT8U readMsgBuf(INT32U *id, INT8U *len, INT8U *buf);               // Read message from receive buffer
     INT8U checkReceive(void);                                           // Check for received data
     INT8U checkError(void);                                             // Check for errors
+    INT8U getError(void);                                               // Check for errors
+    INT8U errorCountRX(void);                                           // Get error count
+    INT8U errorCountTX(void);                                           // Get error count
 };
 
 #endif
