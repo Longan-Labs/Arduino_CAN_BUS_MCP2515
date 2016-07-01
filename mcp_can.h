@@ -1,11 +1,11 @@
 /*
   mcp_can.h
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
-  2014 Copyright (c) Cory J. Fowler  All Rights Reserved.
+  2016 Copyright (c) Cory J. Fowler  All Rights Reserved.
 
   Author:Loovee
   Contributor: Cory J. Fowler
-  2014-1-16
+  2016-07-01
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -31,21 +31,20 @@ class MCP_CAN
 {
     private:
     
-    INT8U   m_nExtFlg;                                                  // identifier xxxID
-                                                                        // either extended (the 29 LSB)
-                                                                        // or standard (the 11 LSB)
+    INT8U   m_nExtFlg;                                                  // Identifier Type
+                                                                        // Extended (29 bit) or Standard (11 bit)
     INT32U  m_nID;                                                      // CAN ID
-    INT8U   m_nDlc;                                                     // data length:
-    INT8U   m_nDta[MAX_CHAR_IN_MESSAGE];                            	// data
-    INT8U   m_nRtr;                                                     // rtr
-    INT8U   m_nfilhit;
-    INT8U   MCPCS;
-    INT8U   mcpMode;
+    INT8U   m_nDlc;                                                     // Data Length Code
+    INT8U   m_nDta[MAX_CHAR_IN_MESSAGE];                            	// Data array
+    INT8U   m_nRtr;                                                     // Remote request flag
+    INT8U   m_nfilhit;                                                  // The number of the filter that matched the message
+    INT8U   MCPCS;                                                      // Chip Select pin number
+    INT8U   mcpMode;                                                    // Mode to return to after configurations are performed.
     
 
-/*
-*  mcp2515 driver function 
-*/
+/*********************************************************************************************************
+ *  mcp2515 driver function 
+ *********************************************************************************************************/
    // private:
    private:
 
@@ -54,7 +53,7 @@ class MCP_CAN
     INT8U mcp2515_readRegister(const INT8U address);                    // Read MCP2515 register
     
     void mcp2515_readRegisterS(const INT8U address,                     // Read MCP2515 successive registers
-	                       INT8U values[], 
+	                             INT8U values[], 
                                const INT8U n);
    
     void mcp2515_setRegister(const INT8U address,                       // Set MCP2515 register
@@ -80,26 +79,26 @@ class MCP_CAN
                        const INT8U canClock);
 		       
     void mcp2515_write_mf( const INT8U mcp_addr,                        // Write CAN Mask or Filter
-                               const INT8U ext,
-                               const INT32U id );
+                           const INT8U ext,
+                           const INT32U id );
 			       
     void mcp2515_write_id( const INT8U mcp_addr,                        // Write CAN ID
-                               const INT8U ext,
-                               const INT32U id );
+                           const INT8U ext,
+                           const INT32U id );
 
     void mcp2515_read_id( const INT8U mcp_addr,                         // Read CAN ID
-                                    INT8U* ext,
-                                    INT32U* id );
+				INT8U* ext,
+                                INT32U* id );
 
     void mcp2515_write_canMsg( const INT8U buffer_sidh_addr );          // Write CAN message
     void mcp2515_read_canMsg( const INT8U buffer_sidh_addr);            // Read CAN message
     INT8U mcp2515_getNextFreeTXBuf(INT8U *txbuf_n);                     // Find empty transmit buffer
 
-/*
-*  CAN operator function
-*/    
+/*********************************************************************************************************
+ *  CAN operator function
+ *********************************************************************************************************/
 
-    INT8U setMsg(INT32U id, INT8U ext, INT8U len, INT8U *pData);        // Set message
+    INT8U setMsg(INT32U id, INT8U rtr, INT8U ext, INT8U len, INT8U *pData);        // Set message
     INT8U clearMsg();                                                   // Clear all message to zero
     INT8U readMsg();                                                    // Read message
     INT8U sendMsg();                                                    // Send message
@@ -125,5 +124,5 @@ public:
 
 #endif
 /*********************************************************************************************************
-  END FILE
-*********************************************************************************************************/
+ *  END FILE
+ *********************************************************************************************************/
