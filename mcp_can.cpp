@@ -61,15 +61,15 @@ INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const INT8U n)
 {
-	INT8U i;
-	MCP2515_SELECT();
-	spi_readwrite(MCP_READ);
-	spi_readwrite(address);
-	// mcp2515 has auto-increment of address-pointer
-	for (i=0; i<n; i++) 
-		values[i] = spi_read();
-	
-	MCP2515_UNSELECT();
+    INT8U i;
+    MCP2515_SELECT();
+    spi_readwrite(MCP_READ);
+    spi_readwrite(address);
+    // mcp2515 has auto-increment of address-pointer
+    for (i=0; i<n; i++) 
+        values[i] = spi_read();
+
+    MCP2515_UNSELECT();
 }
 
 /*********************************************************************************************************
@@ -139,13 +139,8 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 *********************************************************************************************************/
 INT8U MCP_CAN::setMode(const INT8U opMode)
 {
-    INT8U i;
-
     mcpMode = opMode;
-
-    i = mcp2515_setCANCTRL_Mode(mcpMode);
-
-    return i;
+    return mcp2515_setCANCTRL_Mode(mcpMode);
 }
 
 /*********************************************************************************************************
@@ -177,7 +172,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
     set = 1;
     switch (canClock)
     {
-	case (MCP_8MHZ):
+        case (MCP_8MHZ):
         switch (canSpeed) 
         {
             case (CAN_5KBPS):                                               //   5KBPS                  
@@ -260,6 +255,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
 
             default:
             set = 0;
+	    return MCP2515_FAIL;
             break;
         }
         break;
@@ -340,6 +336,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
 
             default:
             set = 0;
+	    return MCP2515_FAIL;
             break;
         }
         break;
@@ -403,12 +400,14 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
 
             default:
             set = 0;
+            return MCP2515_FAIL;
             break;
         }
         break;
         
         default:
         set = 0;
+	return MCP2515_FAIL;
         break;
     }
 
@@ -489,7 +488,7 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
     Serial.print("Entering Configuration Mode Successful!!!\r\n");
 #endif
 
-                                                                        /* set boadrate                 */
+    // Set Baudrate
     if(mcp2515_configRate(canSpeed, canClock))
     {
 #if DEBUG_MODE
@@ -777,7 +776,7 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
     }
     else res =  MCP2515_FAIL;
     
-    res = mcp2515_setCANCTRL_Mode(mcpMode);
+    res = mcp2515_setCANCTRL_Mode(3);
     if(res > 0){
 #if DEBUG_MODE
     Serial.print("Entering Previous Mode Failure...\r\nSetting Mask Failure...\r\n"); 
@@ -971,14 +970,15 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT32U ulData)
 ** Function name:           setMsg
 ** Descriptions:            Set can message, such as dlc, id, dta[] and so on
 *********************************************************************************************************/
-INT8U MCP_CAN::setMsg(INT32U id, INT8U ext, INT8U len, INT8U *pData)
+INT8U MCP_CAN::setMsg(INT32U id, INT8U rtr, INT8U ext, INT8U len, INT8U *pData)
 {
     int i = 0;
-    m_nExtFlg = ext;
     m_nID     = id;
+    m_nRtr    = rtr;
+    m_nExtFlg = ext;
     m_nDlc    = len;
     for(i = 0; i<MAX_CHAR_IN_MESSAGE; i++)
-    m_nDta[i] = *(pData+i);
+        m_nDta[i] = *(pData+i);
 	
     return MCP2515_OK;
 }
@@ -1043,7 +1043,7 @@ INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
 {
     INT8U res;
 	
-    setMsg(id, ext, len, buf);
+    setMsg(id, 0, ext, len, buf);
     sendMsg();
     res = sendMsg();
     
@@ -1056,13 +1056,16 @@ INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
 *********************************************************************************************************/
 INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U len, INT8U *buf)
 {
-    INT8U ext = 0;
+    INT8U ext, rtr = 0;
     INT8U res;
     
     if((id & 0x80000000) == 0x80000000)
         ext = 1;
+ 
+    if((id & 0x40000000) == 0x40000000)
+        rtr = 1;
         
-    setMsg(id, ext, len, buf);
+    setMsg(id, rtr, ext, len, buf);
     res = sendMsg();
     
     return res;
