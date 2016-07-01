@@ -1,4 +1,4 @@
-Work In Progress - Library Seems to Work...
+Sub-Development branch was copied to Master on June 30th, 2016.
 ==============
 
 MCP_CAN Library for Arduino
