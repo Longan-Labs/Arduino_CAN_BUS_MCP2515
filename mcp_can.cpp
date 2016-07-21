@@ -1044,7 +1044,6 @@ INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
     INT8U res;
 	
     setMsg(id, 0, ext, len, buf);
-    sendMsg();
     res = sendMsg();
     
     return res;
