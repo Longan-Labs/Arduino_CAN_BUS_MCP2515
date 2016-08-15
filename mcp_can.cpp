@@ -776,7 +776,7 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
     }
     else res =  MCP2515_FAIL;
     
-    res = mcp2515_setCANCTRL_Mode(3);
+    res = mcp2515_setCANCTRL_Mode(mcpMode);
     if(res > 0){
 #if DEBUG_MODE
     Serial.print("Entering Previous Mode Failure...\r\nSetting Mask Failure...\r\n"); 
