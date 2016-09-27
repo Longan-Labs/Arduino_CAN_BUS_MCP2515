@@ -25,7 +25,7 @@ The sendMsgBuf(ID, EXT, DLC, DATA) has not changed other than fixing return valu
 
 Using the setMode() function the sketch can now put the protocol controller into sleep, loop-back, or listen-only modes as well as normal operation.  Right now the code defaults to loop-back mode after the begin() function runs.  I have found this to increase the stability of filtering when the controller is initialized while connected to an active bus.
 
-User can enable and disable (default) One-Shot transmission mode from the sketch using enOneShot() or disOneShot() respectively.
+User can enable and disable (default) One-Shot transmission mode from the sketch using enOneShotTX() or disOneShotTX() respectively.
 
 Installation
 ==============
