@@ -120,6 +120,8 @@ public:
     INT8U getError(void);                                               // Check for errors
     INT8U errorCountRX(void);                                           // Get error count
     INT8U errorCountTX(void);                                           // Get error count
+    INT8U enOneShotTX(void);                                            // Enable one-shot transmission
+    INT8U disOneShotTX(void);                                           // Disable one-shot transmission
 };
 
 #endif
