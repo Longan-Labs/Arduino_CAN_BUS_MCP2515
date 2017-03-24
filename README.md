@@ -34,4 +34,9 @@ Copy this into the "[.../MySketches/]libraries/" folder and restart the Arduino 
 NOTE: If an older version of the library exists (e.g. CAN_BUS_Shield) be sure to remove it from the libraries folder or replace the files with those in this library to avoid conflicts.
 
 
+Help and Support
+==============
+This is primarily for non-bug related issues: Please start a *new thread* in an appropriate area at Seeedstudio forums or Arduino.cc forums and then send me (coryjfowler) a link through the PM system, my user name is the same as it is here.  I will receive an email about the PM and generally get to it with-in a week or less.  Keep in mind, I do this in my spare time.
+
+
 *Happy Coding!*
