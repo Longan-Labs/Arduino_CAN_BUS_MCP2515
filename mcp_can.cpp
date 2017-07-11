@@ -35,7 +35,7 @@ void MCP_CAN::mcp2515_reset(void)
     MCP2515_SELECT();
     spi_readwrite(MCP_RESET);
     MCP2515_UNSELECT();
-    delay(10);
+    delayMicroseconds(10);
 }
 
 /*********************************************************************************************************
@@ -83,7 +83,7 @@ void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
     spi_readwrite(address);
     spi_readwrite(value);
     MCP2515_UNSELECT();
-    delayMicroseconds(250);
+    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -101,7 +101,7 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
         spi_readwrite(values[i]);
 	
     MCP2515_UNSELECT();
-    delayMicroseconds(250);
+    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -116,7 +116,7 @@ void MCP_CAN::mcp2515_modifyRegister(const INT8U address, const INT8U mask, cons
     spi_readwrite(mask);
     spi_readwrite(data);
     MCP2515_UNSELECT();
-    delayMicroseconds(250);
+    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -741,8 +741,8 @@ INT8U MCP_CAN::mcp2515_getNextFreeTXBuf(INT8U *txbuf_n)                 /* get N
 MCP_CAN::MCP_CAN(INT8U _CS)
 {
     MCPCS = _CS;
-    pinMode(MCPCS, OUTPUT);
     MCP2515_UNSELECT();
+    pinMode(MCPCS, OUTPUT);
 }
 
 /*********************************************************************************************************
