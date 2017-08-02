@@ -35,7 +35,8 @@ void MCP_CAN::mcp2515_reset(void)
     MCP2515_SELECT();
     spi_readwrite(MCP_RESET);
     MCP2515_UNSELECT();
-    delayMicroseconds(10);
+    //delayMicroseconds(10);
+	delay(5); // If the MCP2515 was in sleep mode when the reset command was issued then we need to wait a while for it to reset properly
 }
 
 /*********************************************************************************************************
@@ -134,6 +135,15 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 }
 
 /*********************************************************************************************************
+** Function name:           setSleepWakeup
+** Descriptions:            Enable or disable the wake up interrupt (If disabled the MCP2515 will not be woken up by CAN bus activity)
+*********************************************************************************************************/
+void MCP_CAN::setSleepWakeup(const INT8U enable)
+{
+    mcp2515_modifyRegister(MCP_CANINTE, MCP_WAKIF, enable ? MCP_WAKIF : 0);
+}
+
+/*********************************************************************************************************
 ** Function name:           setMode
 ** Descriptions:            Sets control mode
 *********************************************************************************************************/
@@ -149,17 +159,54 @@ INT8U MCP_CAN::setMode(const INT8U opMode)
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
 {
-    INT8U i;
+	byte startTime = millis();
 
-    mcp2515_modifyRegister(MCP_CANCTRL, MODE_MASK, newmode);
+	// If the chip is asleep and we want to change mode then a manaul wake needs to be done
+	// This is done by setting the wake up interrupt flag
+	// This undocumented trick was found at https://github.com/mkleemann/can/blob/master/can_sleep_mcp2515.c
+	if((mcp2515_readRegister(MCP_CANSTAT) & MODE_MASK) == MCP_SLEEP && newmode != MCP_SLEEP)
+	{
+		// Make sure wake interrupt is enabled
+		byte wakeIntEnabled = (mcp2515_readRegister(MCP_CANINTE) & MCP_WAKIF);
+		if(!wakeIntEnabled)
+			mcp2515_modifyRegister(MCP_CANINTE, MCP_WAKIF, MCP_WAKIF);
 
-    i = mcp2515_readRegister(MCP_CANCTRL);
-    i &= MODE_MASK;
+		// Set wake flag (this does the actual waking up)
+		mcp2515_modifyRegister(MCP_CANINTF, MCP_WAKIF, MCP_WAKIF);
 
-    if ( i == newmode ) 
-        return MCP2515_OK;
+		// Wait for the chip to exit SLEEP and enter LISTENONLY mode
+		while(1)
+		{
+			byte statReg = mcp2515_readRegister(MCP_CANSTAT);
+			if((statReg & MODE_MASK) == MCP_LISTENONLY) // Now in LISTENONLY mode
+				break;
+			else if((byte)(millis() - startTime) > 200) // Wait no more than 200ms for the operation to complete
+				return MCP2515_FAIL;
+		}
 
-    return MCP2515_FAIL;
+		// Turn wake interrupt back off if it was originally off
+		if(!wakeIntEnabled)
+			mcp2515_modifyRegister(MCP_CANINTE, MCP_WAKIF, 0);
+	}
+
+	// Clear wake flag
+	mcp2515_modifyRegister(MCP_CANINTF, MCP_WAKIF, 0);
+	
+	startTime = millis();
+
+	// Spam new mode request and wait for the operation  to complete
+	while(1)
+	{
+		// Request new mode
+		// This is inside the loop as sometimes requesting the new mode once doesn't work (usually when attempting to sleep)
+		mcp2515_modifyRegister(MCP_CANCTRL, MODE_MASK, newmode); 
+
+		byte statReg = mcp2515_readRegister(MCP_CANSTAT);
+		if((statReg & MODE_MASK) == newmode) // We're now in the new mode
+			return MCP2515_OK;
+		else if((byte)(millis() - startTime) > 200) // Wait no more than 200ms for the operation to complete
+			return MCP2515_FAIL;
+	}
 }
 
 /*********************************************************************************************************
