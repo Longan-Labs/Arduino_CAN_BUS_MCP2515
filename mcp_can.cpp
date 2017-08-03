@@ -159,9 +159,7 @@ INT8U MCP_CAN::setMode(const INT8U opMode)
 *********************************************************************************************************/
 INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
 {
-	byte startTime = millis();
-
-	// If the chip is asleep and we want to change mode then a manaul wake needs to be done
+	// If the chip is asleep and we want to change mode then a manual wake needs to be done
 	// This is done by setting the wake up interrupt flag
 	// This undocumented trick was found at https://github.com/mkleemann/can/blob/master/can_sleep_mcp2515.c
 	if((mcp2515_readRegister(MCP_CANSTAT) & MODE_MASK) == MCP_SLEEP && newmode != MCP_SLEEP)
@@ -174,15 +172,14 @@ INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
 		// Set wake flag (this does the actual waking up)
 		mcp2515_modifyRegister(MCP_CANINTF, MCP_WAKIF, MCP_WAKIF);
 
-		// Wait for the chip to exit SLEEP and enter LISTENONLY mode
-		while(1)
-		{
-			byte statReg = mcp2515_readRegister(MCP_CANSTAT);
-			if((statReg & MODE_MASK) == MCP_LISTENONLY) // Now in LISTENONLY mode
-				break;
-			else if((byte)(millis() - startTime) > 200) // Wait no more than 200ms for the operation to complete
-				return MCP2515_FAIL;
-		}
+		// Wait for the chip to exit SLEEP and enter LISTENONLY mode.
+
+		// If the chip is not connected to a CAN bus (or the bus has no other powered nodes) it will sometimes trigger the wake interrupt as soon
+		// as it's put to sleep, but it will stay in SLEEP mode instead of automatically switching to LISTENONLY mode.
+		// In this situation the mode needs to be manually set to LISTENONLY.
+
+		if(mcp2515_requestNewMode(MCP_LISTENONLY) != MCP2515_OK)
+			return MCP2515_FAIL;
 
 		// Turn wake interrupt back off if it was originally off
 		if(!wakeIntEnabled)
@@ -192,7 +189,16 @@ INT8U MCP_CAN::mcp2515_setCANCTRL_Mode(const INT8U newmode)
 	// Clear wake flag
 	mcp2515_modifyRegister(MCP_CANINTF, MCP_WAKIF, 0);
 	
-	startTime = millis();
+	return mcp2515_requestNewMode(newmode);
+}
+
+/*********************************************************************************************************
+** Function name:           mcp2515_requestNewMode
+** Descriptions:            Set control mode
+*********************************************************************************************************/
+INT8U MCP_CAN::mcp2515_requestNewMode(const INT8U newmode)
+{
+	byte startTime = millis();
 
 	// Spam new mode request and wait for the operation  to complete
 	while(1)

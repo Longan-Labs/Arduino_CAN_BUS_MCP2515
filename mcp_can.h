@@ -71,6 +71,7 @@ class MCP_CAN
 
     INT8U mcp2515_readStatus(void);                                     // Read MCP2515 Status
     INT8U mcp2515_setCANCTRL_Mode(const INT8U newmode);                 // Set mode
+	INT8U mcp2515_requestNewMode(const INT8U newmode);                  // Set mode
     INT8U mcp2515_configRate(const INT8U canSpeed,                      // Set baudrate
                              const INT8U canClock);
                              
