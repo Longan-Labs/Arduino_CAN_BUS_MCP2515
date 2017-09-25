@@ -36,6 +36,7 @@ void MCP_CAN::mcp2515_reset(void)
     SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_RESET);
     MCP2515_UNSELECT();
+    SPI.endTransaction();
     delayMicroseconds(10);
 }
 
@@ -52,6 +53,7 @@ INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)
     spi_readwrite(MCP_READ);
     spi_readwrite(address);
     ret = spi_read();
+    SPI.endTransaction();
     MCP2515_UNSELECT();
 
     return ret;
@@ -72,6 +74,7 @@ void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const I
     for (i=0; i<n; i++) 
         values[i] = spi_read();
 
+    SPI.endTransaction();
     MCP2515_UNSELECT();
 }
 
@@ -86,6 +89,7 @@ void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
     spi_readwrite(MCP_WRITE);
     spi_readwrite(address);
     spi_readwrite(value);
+    SPI.endTransaction();
     MCP2515_UNSELECT();
 }
 
@@ -104,6 +108,7 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
     for (i=0; i<n; i++) 
         spi_readwrite(values[i]);
 	
+    SPI.endTransaction();
     MCP2515_UNSELECT();
 }
 
@@ -119,6 +124,7 @@ void MCP_CAN::mcp2515_modifyRegister(const INT8U address, const INT8U mask, cons
     spi_readwrite(address);
     spi_readwrite(mask);
     spi_readwrite(data);
+    SPI.endTransaction();
     MCP2515_UNSELECT();
 }
 
@@ -133,6 +139,7 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
     SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_READ_STATUS);
     i = spi_read();
+    SPI.endTransaction();
     MCP2515_UNSELECT();
     return i;
 }
