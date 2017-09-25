@@ -1,11 +1,11 @@
 /*
   mcp_can.cpp
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
-  2014 Copyright (c) Cory J. Fowler  All Rights Reserved.
+  2017 Copyright (c) Cory J. Fowler  All Rights Reserved.
 
   Author: Loovee
   Contributor: Cory J. Fowler
-  2014-9-16
+  2017-09-25
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -33,6 +33,7 @@
 void MCP_CAN::mcp2515_reset(void)                                      
 {
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_RESET);
     MCP2515_UNSELECT();
     delayMicroseconds(10);
@@ -47,6 +48,7 @@ INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)
     INT8U ret;
 
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_READ);
     spi_readwrite(address);
     ret = spi_read();
@@ -63,6 +65,7 @@ void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const I
 {
     INT8U i;
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_READ);
     spi_readwrite(address);
     // mcp2515 has auto-increment of address-pointer
@@ -79,11 +82,11 @@ void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const I
 void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
 {
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_WRITE);
     spi_readwrite(address);
     spi_readwrite(value);
     MCP2515_UNSELECT();
-    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -94,6 +97,7 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
 {
     INT8U i;
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_WRITE);
     spi_readwrite(address);
        
@@ -101,7 +105,6 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
         spi_readwrite(values[i]);
 	
     MCP2515_UNSELECT();
-    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -111,12 +114,12 @@ void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], co
 void MCP_CAN::mcp2515_modifyRegister(const INT8U address, const INT8U mask, const INT8U data)
 {
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_BITMOD);
     spi_readwrite(address);
     spi_readwrite(mask);
     spi_readwrite(data);
     MCP2515_UNSELECT();
-    //delayMicroseconds(250);
 }
 
 /*********************************************************************************************************
@@ -127,6 +130,7 @@ INT8U MCP_CAN::mcp2515_readStatus(void)
 {
     INT8U i;
     MCP2515_SELECT();
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
     spi_readwrite(MCP_READ_STATUS);
     i = spi_read();
     MCP2515_UNSELECT();
@@ -520,6 +524,11 @@ INT8U MCP_CAN::mcp2515_init(const INT8U canIDMode, const INT8U canSpeed, const I
                                                                         /* interrupt mode               */
         mcp2515_setRegister(MCP_CANINTE, MCP_RX0IF | MCP_RX1IF);
 
+	//Sets BF pins as GPO
+	mcp2515_setRegister(MCP_BFPCTRL,MCP_BxBFS_MASK | MCP_BxBFE_MASK);
+	//Sets RTS pins as GPI
+	mcp2515_setRegister(MCP_TXRTSCTRL,0x00);
+
         switch(canIDMode)
         {
             case (MCP_ANY):
@@ -774,10 +783,10 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
     res = mcp2515_setCANCTRL_Mode(MODE_CONFIG);
     if(res > 0){
 #if DEBUG_MODE
-    Serial.print("Entering Configuration Mode Failure...\r\n"); 
+	Serial.print("Entering Configuration Mode Failure...\r\n"); 
 #endif
-  return res;
-}
+	return res;
+     }
     
     if (num == 0){
         mcp2515_write_mf(MCP_RXM0SIDH, ext, ulData);
@@ -791,10 +800,10 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT8U ext, INT32U ulData)
     res = mcp2515_setCANCTRL_Mode(mcpMode);
     if(res > 0){
 #if DEBUG_MODE
-    Serial.print("Entering Previous Mode Failure...\r\nSetting Mask Failure...\r\n"); 
+	Serial.print("Entering Previous Mode Failure...\r\nSetting Mask Failure...\r\n"); 
 #endif
-    return res;
-  }
+	return res;
+    }
 #if DEBUG_MODE
     Serial.print("Setting Mask Successful!\r\n");
 #endif
@@ -1231,6 +1240,43 @@ INT8U MCP_CAN::disOneShotTX(void)
         return CAN_FAIL;
     else
         return CAN_OK;
+}
+
+/*********************************************************************************************************
+** Function name:           mcp2515_abortTX
+** Descriptions:            Aborts any queued transmissions
+*********************************************************************************************************/
+INT8U MCP_CAN::abortTX(void)                             
+{
+    mcp2515_modifyRegister(MCP_CANCTRL, ABORT_TX, ABORT_TX);
+	
+    // Maybe check to see if the TX buffer transmission request bits are cleared instead?
+    if((mcp2515_readRegister(MCP_CANCTRL) & ABORT_TX) != ABORT_TX)
+	    return CAN_FAIL;
+    else
+	    return CAN_OK;
+}
+
+/*********************************************************************************************************
+** Function name:           setGPO
+** Descriptions:            Public function, Checks for r
+*********************************************************************************************************/
+INT8U MCP_CAN::setGPO(INT8U data)
+{
+    mcp2515_modifyRegister(MCP_BFPCTRL, MCP_BxBFS_MASK, (data<<4));
+	    
+    return 0;
+}
+
+/*********************************************************************************************************
+** Function name:           getGPI
+** Descriptions:            Public function, Checks for r
+*********************************************************************************************************/
+INT8U MCP_CAN::getGPI(void)
+{
+    INT8U res;
+    res = mcp2515_readRegister(MCP_TXRTSCTRL) & MCP_BxRTS_MASK;
+    return (res >> 3);
 }
 
 /*********************************************************************************************************
