@@ -1,11 +1,11 @@
 /*
   mcp_can_dfs.h
   2012 Copyright (c) Seeed Technology Inc.  All right reserved.
-  2014 Copyright (c) Cory J. Fowler  All Rights Reserved.
+  2017 Copyright (c) Cory J. Fowler  All Rights Reserved.
 
   Author:Loovee
   Contributor: Cory J. Fowler
-  2014-1-16
+  2017-09-25
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -88,6 +88,12 @@
 #define MCP_EFLG_EWARN      (1<<0)
 #define MCP_EFLG_ERRORMASK  (0xF8)                                      /* 5 MS-Bits                    */
 
+#define MCP_BxBFS_MASK    0x30
+#define MCP_BxBFE_MASK    0x0C
+#define MCP_BxBFM_MASK    0x03
+
+#define MCP_BxRTS_MASK    0x38
+#define MCP_BxRTSM_MASK   0x07
 
 /*
  *   Define MCP2515 register addresses
@@ -104,6 +110,8 @@
 #define MCP_RXF2SIDL    0x09
 #define MCP_RXF2EID8    0x0A
 #define MCP_RXF2EID0    0x0B
+#define MCP_BFPCTRL     0x0C
+#define MCP_TXRTSCTRL   0x0D
 #define MCP_CANSTAT     0x0E
 #define MCP_CANCTRL     0x0F
 #define MCP_RXF3SIDH    0x10
