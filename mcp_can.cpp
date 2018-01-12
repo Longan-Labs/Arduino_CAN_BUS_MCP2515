@@ -836,7 +836,7 @@ INT8U MCP_CAN::init_Mask(INT8U num, INT32U ulData)
   return res;
 }
     
-    if((num & 0x80000000) == 0x80000000)
+    if((ulData & 0x80000000) == 0x80000000)
         ext = 1;
     
     if (num == 0){
@@ -946,7 +946,7 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT32U ulData)
       return res;
     }
     
-    if((num & 0x80000000) == 0x80000000)
+    if((ulData & 0x80000000) == 0x80000000)
         ext = 1;
     
     switch( num )
