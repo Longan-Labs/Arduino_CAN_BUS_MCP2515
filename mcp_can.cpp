@@ -530,6 +530,32 @@ MCP_CAN::MCP_CAN(INT8U _CS)
 }
 
 /*********************************************************************************************************
+** Function name:           set the CAN object
+** Descriptions:            init CAN object only
+*********************************************************************************************************/
+MCP_CAN::MCP_CAN()
+{
+}
+
+/*********************************************************************************************************
+** Function name:           init
+** Descriptions:            init can cs and set speed
+*********************************************************************************************************/
+INT8U MCP_CAN::begin(INT8U speedset, INT8U _CS)
+{
+    SPICS = _CS;
+    pinMode(SPICS, OUTPUT);
+    MCP2515_UNSELECT();
+
+    INT8U res;
+
+    SPI.begin();
+    res = mcp2515_init(speedset);
+    if (res == MCP2515_OK) return CAN_OK;
+    else return CAN_FAILINIT;
+}
+
+/*********************************************************************************************************
 ** Function name:           init
 ** Descriptions:            init can and set speed
 *********************************************************************************************************/
@@ -721,7 +747,7 @@ INT8U MCP_CAN::sendMsg()
 INT8U MCP_CAN::sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf)
 {
     setMsg(id, ext, len, buf);
-    sendMsg();
+    return sendMsg();
 }
 
 /*********************************************************************************************************
