@@ -95,7 +95,9 @@ class MCP_CAN
 
 public:
     MCP_CAN(INT8U _CS);
-    INT8U begin(INT8U speedset);                              /* init can                     */
+    MCP_CAN();
+    INT8U begin(INT8U speedset);                                    /* init can                     */
+    INT8U begin(INT8U speedset, INT8U _CS);                         /* init can with speedset and CS*/
     INT8U init_Mask(INT8U num, INT8U ext, INT32U ulData);           /* init Masks                   */
     INT8U init_Filt(INT8U num, INT8U ext, INT32U ulData);           /* init filters                 */
     INT8U sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf);  /* send buf                     */
