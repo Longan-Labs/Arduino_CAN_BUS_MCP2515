@@ -13,24 +13,29 @@ byte rxBuf[8];
 
 byte txBuf0[] = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55};
 byte txBuf1[] = {0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
+char msgString[128];                        // Array to store serial string
 
-MCP_CAN CAN0(10);                              // CAN0 interface usins CS on digital pin 10
-MCP_CAN CAN1(9);                               // CAN1 interface using CS on digital pin 9
+MCP_CAN CAN0(2);                              // CAN0 interface usins CS on digital pin 2
+MCP_CAN CAN1(3);                               // CAN1 interface using CS on digital pin 3
+
+#define CAN0_INT 4    //define interrupt pin for CAN0 recieve buffer
+#define CAN1_INT 5    //define interrupt pin for CAN1 recieve buffer
 
 void setup()
 {
   Serial.begin(115200);
   
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
+  pinMode(CAN0_INT, INPUT_PULLUP);
+  pinMode(CAN1_INT, INPUT_PULLUP);
+  
   // init CAN0 bus, baudrate: 250k@16MHz
-  if(CAN0.begin(MCP_EXT, CAN_250KBPS, MCP_16MHZ) == CAN_OK){
+  if(CAN0.begin(MCP_ANY, CAN_250KBPS, MCP_16MHZ) == CAN_OK){
   Serial.print("CAN0: Init OK!\r\n");
   CAN0.setMode(MCP_NORMAL);
   } else Serial.print("CAN0: Init Fail!!!\r\n");
   
   // init CAN1 bus, baudrate: 250k@16MHz
-  if(CAN1.begin(MCP_EXT, CAN_250KBPS, MCP_16MHZ) == CAN_OK){
+  if(CAN1.begin(MCP_ANY, CAN_250KBPS, MCP_16MHZ) == CAN_OK){
   Serial.print("CAN1: Init OK!\r\n");
   CAN1.setMode(MCP_NORMAL);
   } else Serial.print("CAN1: Init Fail!!!\r\n");
@@ -42,14 +47,57 @@ void setup()
 }
 
 void loop(){  
-  if(!digitalRead(2)){                         // If pin 2 is low, read CAN0 receive buffer
+  if(!digitalRead(CAN0_INT)){                  // If interrupt pin is low, read CAN0 receive buffer
+    Serial.println("CAN0 receive buffer:");
     CAN0.readMsgBuf(&rxId, &len, rxBuf);       // Read data: len = data length, buf = data byte(s)
-    CAN1.sendMsgBuf(rxId, 1, len, rxBuf);      // Immediately send message out CAN1 interface
+    CAN1.sendMsgBuf(rxId, 1, len, rxBuf);      // Immediately send message out CAN1 interface 
+    
+    if((rxId & 0x80000000) == 0x80000000)      // Determine if ID is standard (11 bits) or extended (29 bits)
+      sprintf(msgString, "Extended ID: 0x%.8lX  DLC: %1d  Data:", (rxId & 0x1FFFFFFF), len);
+    else
+      sprintf(msgString, "Standard ID: 0x%.3lX       DLC: %1d  Data:", rxId, len);
+  
+    Serial.print(msgString);
+  
+    if((rxId & 0x40000000) == 0x40000000){    // Determine if message is a remote request frame.
+      sprintf(msgString, " REMOTE REQUEST FRAME");
+      Serial.print(msgString);
+    } else {
+      for(byte i = 0; i<len; i++){
+        sprintf(msgString, " 0x%.2X", rxBuf[i]);
+        Serial.print(msgString);
+      }
+    }
+        
+    Serial.println();
   }
-  if(!digitalRead(3)){                         // If pin 3 is low, read CAN1 receive buffer
+  
+  if(!digitalRead(CAN1_INT)){                         // If interrupt pin is low, read CAN1 receive buffer
+    Serial.println("CAN1 receive buffer:");
     CAN1.readMsgBuf(&rxId, &len, rxBuf);       // Read data: len = data length, buf = data byte(s)
     CAN0.sendMsgBuf(rxId, 1, len, rxBuf);      // Immediately send message out CAN0 interface
+    
+    if((rxId & 0x80000000) == 0x80000000)     // Determine if ID is standard (11 bits) or extended (29 bits)
+      sprintf(msgString, "Extended ID: 0x%.8lX  DLC: %1d  Data:", (rxId & 0x1FFFFFFF), len);
+    else
+      sprintf(msgString, "Standard ID: 0x%.3lX       DLC: %1d  Data:", rxId, len);
+  
+    Serial.print(msgString);
+  
+    if((rxId & 0x40000000) == 0x40000000){    // Determine if message is a remote request frame.
+      sprintf(msgString, " REMOTE REQUEST FRAME");
+      Serial.print(msgString);
+    } else {
+      for(byte i = 0; i<len; i++){
+        sprintf(msgString, " 0x%.2X", rxBuf[i]);
+        Serial.print(msgString);
+      }
+    }
+        
+    Serial.println();
   }
+
+  delay(1000);
 }
 
 /*********************************************************************************************************
