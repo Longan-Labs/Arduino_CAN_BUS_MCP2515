@@ -11,8 +11,8 @@ unsigned long rxId;
 byte len;
 byte rxBuf[8];
 
-byte txBuf0[] = {AA,55,AA,55,AA,55,AA,55};
-byte txBuf1[] = {55,AA,55,AA,55,AA,55,AA};
+byte txBuf0[] = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55};
+byte txBuf1[] = {0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
 
 MCP_CAN CAN0(10);                              // CAN0 interface usins CS on digital pin 10
 MCP_CAN CAN1(9);                               // CAN1 interface using CS on digital pin 9
@@ -21,6 +21,8 @@ void setup()
 {
   Serial.begin(115200);
   
+  pinMode(4, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
   // init CAN0 bus, baudrate: 250k@16MHz
   if(CAN0.begin(MCP_EXT, CAN_250KBPS, MCP_16MHZ) == CAN_OK){
   Serial.print("CAN0: Init OK!\r\n");
@@ -35,8 +37,8 @@ void setup()
   
   SPI.setClockDivider(SPI_CLOCK_DIV2);         // Set SPI to run at 8MHz (16MHz / 2 = 8 MHz)
   
-  CAN0.sendMsgBuf(0x1000000, 1, 8, tx0Buf);
-  CAN1.sendMsgBuf(0x1000001, 1, 8, tx1Buf);
+  CAN0.sendMsgBuf(0x1000000, 1, 8, txBuf0);
+  CAN1.sendMsgBuf(0x1000001, 1, 8, txBuf1);
 }
 
 void loop(){  
