@@ -1,7 +1,5 @@
-// send a frame from can bus
-
-#include <SPI.h>
-#include "mcp_can.h"
+// demo: set_mask_filter_send
+// this demo will show you how to use mask and filter
 
 #include <mcp_can.h>
 #include <SPI.h>
@@ -24,25 +22,18 @@ void setup()
     Serial.println("CAN BUS OK!");
 }
 
-unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned char stmp[8] = {0, 1, 2, 3, 4, 5, 6, 7};
+
 void loop()
 {
-    // send data:  id = 0x00, standrad frame, data len = 8, stmp: data buf
-    stmp[7] = stmp[7]+1;
-    if(stmp[7] == 100)
+    for(int id=0; id<10; id++)
     {
-        stmp[7] = 0;
-        stmp[6] = stmp[6] + 1;
-        
-        if(stmp[6] == 100)
-        {
-            stmp[6] = 0;
-            stmp[5] = stmp[6] + 1;
-        }
+        memset(stmp, id, sizeof(stmp));                 // set id to send data buff
+        CAN.sendMsgBuf(id, 0, sizeof(stmp), stmp);
+        delay(100);
     }
-    
-    CAN.sendMsgBuf(0x00, 0, 8, stmp);
-    delay(100);                       // send data per 100ms
 }
 
-// END FILE
+/*********************************************************************************************************
+  END FILE
+*********************************************************************************************************/

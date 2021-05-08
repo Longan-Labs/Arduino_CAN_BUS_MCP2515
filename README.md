@@ -1,15 +1,22 @@
-MCP2515 Library for Arduino
-==============
-MCP2515 library v1.1
-This library is compatible with any shield or CAN interface that uses the MCP2515 CAN protocol controller.
-Baudrates 5k, 10k, 20k, 50k, 100k, 125k, 250k, 500k, & 1000k are confirmed to work using a Peak-System PCAN-USB dongle as a reference.
+![](https://www.longan-labs.cc/media/wysiwyg/Categories/Categories-40.png)
 
-Installation
-==============
-Copy this into your "[...]/MySketches/libraries/" folder and restart the Arduino editor.
+This library is wrote for MCP2515, and it's available for most Arduino board, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
 
-NOTE: If you have an older version of the library (CAN_BUS_Shield) be sure to remove
- it from the libraries folder or replace the files with those in this library to avoid conflicts.
+With this library, you can,
+
+1. Send a CAN2.0 frame
+2. Receive a CAN2.0 frame
+3. Set the masks and filters
+
+If you need a Dev board, plese try,
+
+[CAN Bus Shield for Arduino](https://www.longan-labs.cc/1030016.html)
+
+[CANBed V1](https://www.longan-labs.cc/1030008.html)
+
+[CANBed M0](https://www.longan-labs.cc/1030014.html)
+
+If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
 
 
-*Happy Coding!*
+[![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Longan_CAN_MCP2515)](https://github.com/igrigorik/ga-beacon)
