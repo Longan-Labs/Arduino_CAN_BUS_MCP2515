@@ -1,4 +1,4 @@
-![](https://www.longan-labs.cc/media/wysiwyg/Categories/Categories-40.png)
+![](https://www.longan-labs.cc/media/catalog/category/Categories-12.png)
 
 This library is wrote for MCP2515, and it's available for most Arduino board, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
 
