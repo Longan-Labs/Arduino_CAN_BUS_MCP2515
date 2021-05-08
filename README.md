@@ -19,4 +19,4 @@ If you need a Dev board, plese try,
 If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
 
 
-[![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Longan_CAN_MCP2515)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Aruino_CAN_BUS_MCP2515)](https://github.com/igrigorik/ga-beacon)
