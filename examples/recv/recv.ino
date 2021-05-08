@@ -25,6 +25,7 @@
     CANBed V1: https://www.longan-labs.cc/1030008.html
     CANBed M0: https://www.longan-labs.cc/1030014.html
     CAN Bus Shield: https://www.longan-labs.cc/1030016.html
+    OBD-II CAN Bus GPS Dev Kit: https://www.longan-labs.cc/1030003.html
 */
 
 #include <SPI.h>
@@ -40,6 +41,11 @@ void setup()
 {
     Serial.begin(115200);
     while(!Serial);
+    
+    // below code need for OBD-II GPS Dev Kit
+    // pinMode(A3, OUTPUT);
+    // digitalWrite(A3, HIGH);
+    
     while (CAN_OK != CAN.begin(CAN_500KBPS))    // init can bus : baudrate = 500k
     {
         Serial.println("CAN BUS FAIL!");
