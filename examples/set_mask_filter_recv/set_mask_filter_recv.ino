@@ -1,5 +1,32 @@
-// receive a frame from can bus with mask and filter setting
+/*  receive a frame from can bus with mask and filter setting
+    support@longan-labs.cc
 
+    CAN Baudrate,
+    
+    #define CAN_5KBPS           1
+    #define CAN_10KBPS          2
+    #define CAN_20KBPS          3
+    #define CAN_25KBPS          4 
+    #define CAN_31K25BPS        5
+    #define CAN_33KBPS          6
+    #define CAN_40KBPS          7
+    #define CAN_50KBPS          8
+    #define CAN_80KBPS          9
+    #define CAN_83K3BPS         10
+    #define CAN_95KBPS          11
+    #define CAN_100KBPS         12
+    #define CAN_125KBPS         13
+    #define CAN_200KBPS         14
+    #define CAN_250KBPS         15
+    #define CAN_500KBPS         16
+    #define CAN_666KBPS         17
+    #define CAN_1000KBPS        18
+   
+    CANBed V1: https://www.longan-labs.cc/1030008.html
+    CANBed M0: https://www.longan-labs.cc/1030014.html
+    CAN Bus Shield: https://www.longan-labs.cc/1030016.html
+   
+*/
 #include <SPI.h>
 #include "mcp_can.h"
 
@@ -29,9 +56,6 @@ void setup()
     }
     Serial.println("CAN BUS OK!");
 
-    attachInterrupt(0, MCP2515_ISR, FALLING); // start interrupt
-
-
     /*
      * set mask, set both the mask to 0x3ff
      */
@@ -52,17 +76,10 @@ void setup()
 
 }
 
-void MCP2515_ISR()
-{
-    flagRecv = 1;
-}
-
 void loop()
 {
-    if(flagRecv)                   // check if get data
+    if(CAN_MSGAVAIL == CAN.checkReceive())                   // check if get data
     {
-
-        flagRecv = 0;                // clear flag
         CAN.readMsgBuf(&len, buf);    // read data,  len: data length, buf: data buf
 
         Serial.println("\r\n------------------------------------------------------------------");
@@ -79,6 +96,4 @@ void loop()
     }
 }
 
-/*********************************************************************************************************
-  END FILE
-*********************************************************************************************************/
+// END FILE

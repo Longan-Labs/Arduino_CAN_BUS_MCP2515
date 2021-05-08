@@ -1,29 +1,7 @@
 /*
   mcp_can.h
-  2012 Copyright (c) Seeed Technology Inc.  All right reserved.
-
-  Author:Loovee (loovee@seeed.cc)
-  2014-1-16
-
-  Contributor:
-
-  Cory J. Fowler
-  Latonita
-  Woodward1
-  Mehtajaghvi
-  BykeBlast
-  TheRo0T
-  Tsipizic
-  ralfEdmund
-  Nathancheek
-  BlueAndi
-  Adlerweb
-  Btetz
-  Hurvajs
 
   The MIT License (MIT)
-
-  Copyright (c) 2013 Seeed Technology Inc.
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
