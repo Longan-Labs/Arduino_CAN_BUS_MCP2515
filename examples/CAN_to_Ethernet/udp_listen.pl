@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #This works on Debian Linux
 #I have not tested it on a Windows system running Perl, but it should work if all dependencies are met.
-#Also, FIREWALL.  <--- I gaurantee that will be the issue.
+#Also, FIREWALL.  <--- I guarantee that will be the issue.
 
 use IO::Socket;
 

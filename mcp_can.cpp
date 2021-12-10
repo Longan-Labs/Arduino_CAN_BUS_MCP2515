@@ -61,7 +61,7 @@ INT8U MCP_CAN::mcp2515_readRegister(const INT8U address)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_readRegisterS
-** Descriptions:            Reads sucessive data registers
+** Descriptions:            Reads successive data registers
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_readRegisterS(const INT8U address, INT8U values[], const INT8U n)
 {
@@ -95,7 +95,7 @@ void MCP_CAN::mcp2515_setRegister(const INT8U address, const INT8U value)
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_setRegisterS
-** Descriptions:            Sets sucessive data registers
+** Descriptions:            Sets successive data registers
 *********************************************************************************************************/
 void MCP_CAN::mcp2515_setRegisterS(const INT8U address, const INT8U values[], const INT8U n)
 {
@@ -974,7 +974,7 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT8U ext, INT32U ulData)
       return res;
     }
 #if DEBUG_MODE
-    Serial.println(F("Setting Filter Successfull!"));
+    Serial.println(F("Setting Filter Successful!"));
 #endif
     
     return res;
@@ -1044,7 +1044,7 @@ INT8U MCP_CAN::init_Filt(INT8U num, INT32U ulData)
       return res;
     }
 #if DEBUG_MODE
-    Serial.println(F("Setting Filter Successfull!"));
+    Serial.println(F("Setting Filter Successful!"));
 #endif
     
     return res;

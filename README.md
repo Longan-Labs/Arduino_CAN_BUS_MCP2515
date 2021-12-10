@@ -3,7 +3,7 @@ MCP_CAN Library for Arduino
 MCP_CAN library v1.5
 This library is compatible with any shield or board that uses the MCP2515 or MCP25625 CAN protocol controller.
 
-This version supports setting the ID filter mode of the protocol controller, the BAUD rate with clock speed with the begin() function.  Baudrates 5k, 10k, 20k, 50k, 100k, 125k, 250k, 500k, & 1000k using 16MHz clock on the MCP2515 are confirmed to work using a Peak-System PCAN-USB dongle as a reference.  Baudrates for 8MHz and 20MHz crystals are yet to be confirmed but were calculated appropiately.
+This version supports setting the ID filter mode of the protocol controller, the BAUD rate with clock speed with the begin() function.  Baudrates 5k, 10k, 20k, 50k, 100k, 125k, 250k, 500k, & 1000k using 16MHz clock on the MCP2515 are confirmed to work using a Peak-System PCAN-USB dongle as a reference.  Baudrates for 8MHz and 20MHz crystals are yet to be confirmed but were calculated appropriately.
 
 **The readMsgBuf() functions bring in the message ID. The getCanId() function is obsolete and no longer exists, don't use it.**
 
