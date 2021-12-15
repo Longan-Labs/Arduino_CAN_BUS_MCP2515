@@ -37,7 +37,9 @@
 #endif
 
 // if print debug information
+#ifndef DEBUG_MODE
 #define DEBUG_MODE 1
+#endif
 
 /*
  *   Begin mt
