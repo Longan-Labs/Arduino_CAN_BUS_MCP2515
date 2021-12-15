@@ -441,6 +441,9 @@
 #define MCP_20MHZ    0
 #define MCP_16MHZ    1
 #define MCP_8MHZ     2
+#define MCP_CLOCK_SELECT 3
+#define MCP_CLKOUT_ENABLE 4
+
 
 #define CAN_4K096BPS 0
 #define CAN_5KBPS    1
