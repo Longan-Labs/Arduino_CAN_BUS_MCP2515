@@ -72,7 +72,7 @@ void loop()
 	Serial.println(F("SLEEPING..."));
 
 	// Put MCP2515 into sleep mode
-	// This can sometimes take upto around 100ms depending on what the chip is currently doing
+	// This can sometimes take up to around 100ms depending on what the chip is currently doing
 	CAN0.setMode(MCP_SLEEP);
 
 	Serial.println(F("SLEEP"));
@@ -82,7 +82,7 @@ void loop()
 
 	// Put the microcontroller to sleep
 	cli(); // Disable interrupts
-	if(digitalRead(CAN0_INT)) // Make sure we havn't missed an interrupt between the digitalRead() above and now. If an interrupt happens between now and sei()/sleep_cpu() then sleep_cpu() will immediately wake up again
+	if(digitalRead(CAN0_INT)) // Make sure we haven't missed an interrupt between the digitalRead() above and now. If an interrupt happens between now and sei()/sleep_cpu() then sleep_cpu() will immediately wake up again
 	{
 		sleep_enable();
 		sleep_bod_disable();
