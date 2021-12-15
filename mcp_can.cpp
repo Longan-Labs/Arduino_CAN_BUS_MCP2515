@@ -233,7 +233,7 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
 {
     INT8U set, cfg1, cfg2, cfg3;
     set = 1;
-    switch (canClock)
+    switch (canClock & MCP_CLOCK_SELECT)
     {
         case (MCP_8MHZ):
         switch (canSpeed) 
@@ -484,6 +484,10 @@ INT8U MCP_CAN::mcp2515_configRate(const INT8U canSpeed, const INT8U canClock)
         set = 0;
 	return MCP2515_FAIL;
         break;
+    }
+
+    if (canClock & MCP_CLKOUT_ENABLE) {
+        cfg3 &= (~SOF_ENABLE);
     }
 
     if (set) {
