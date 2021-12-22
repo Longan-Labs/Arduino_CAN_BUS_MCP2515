@@ -1,0 +1,13 @@
+{
+  "name": "CAN_BUS_Shield",
+  "keywords": "can, bus, mcp2515, MCP-2515",
+  "description": "Arduino Library for MCP2515",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Longan-Labs/Aruino_CAN_BUS_MCP2515.git"
+  },
+  "version": "1.0.0",
+  "frameworks": "arduino",
+  "platforms": "atmelavr"
+}
