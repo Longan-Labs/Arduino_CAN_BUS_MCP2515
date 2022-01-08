@@ -62,7 +62,7 @@ void sendPid(unsigned char __pid) {
 
 bool getSpeed(int *s)
 {
-    sendPid(PID_VEHICLE_SPEED);
+    sendPid(PID_ENGIN_PRM);
     unsigned long __timeout = millis();
 
     while(millis()-__timeout < 1000)      // 1s time out
