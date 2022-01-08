@@ -34,18 +34,18 @@
 #include <SPI.h>
 #include "mcp_can.h"
 
-// Please modify SPI_CS_PIN to adapt to different baords.
+/* Please modify SPI_CS_PIN to adapt to different baords.
 
-const int SPI_CS_PIN = 17;              // CANBed V1
-// const int SPI_CS_PIN = 3;            // CANBed M0
-/*
-  CAN Bus Shield
-  CANBed 2040
-  CANBed Dual
-  OBD-2G Dev Kit
-  OBD-II Hud Dev Kit
+   CANBed V1        - 17
+   CANBed M0        - 3
+   CAN Bus Shield   - 9
+   CANBed 2040      - 9
+   CANBed Dual      - 9
+   OBD-2G Dev Kit   - 9
+   Hud Dev Kit      - 9
 */
-//const int SPI_CS_PIN = 9; 
+
+#define SPI_CS_PIN  9 
 
 MCP_CAN CAN(SPI_CS_PIN);                                    // Set CS pin
 
