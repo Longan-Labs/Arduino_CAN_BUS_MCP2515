@@ -35,7 +35,7 @@ NOTE: If an older version of the library exists (e.g. CAN_BUS_Shield) be sure to
 
 Help and Support
 ==============
-This is primarily for non-bug related issues: Please start a *new thread* in an appropriate area at Seeedstudio forums or Arduino.cc forums and then send me (coryjfowler) a link through the PM system, my user name is the same as it is here.  I will receive an email about the PM and generally get to it with-in a week or less.  Keep in mind, I do this in my spare time.
+This is primarily for non-bug related issues: Please start a *new thread* in an appropriate area at Seeedstudio forums or Arduino.cc forums and then send me (coryjfowler) a link through the PM system, my user name is the same as it is here.  I will receive an email about the PM.  Keep in mind, I do this in my spare time.
 
 
 *Happy Coding!*
