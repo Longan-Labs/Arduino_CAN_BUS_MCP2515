@@ -44,7 +44,7 @@
 /*
  *   Begin mt
  */
-#define TIMEOUTVALUE    50
+#define TIMEOUTVALUE    2500                                           /* In Microseconds, May need changed depending on application and baud rate */
 #define MCP_SIDH        0
 #define MCP_SIDL        1
 #define MCP_EID8        2
