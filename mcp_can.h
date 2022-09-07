@@ -110,6 +110,8 @@ public:
     unsigned long getCanId(void);                                   // get can id when receive
     byte isRemoteRequest(void);                                     // get RR flag when receive
     byte isExtendedFrame(void);                                     // did we recieve 29bit frame?
+    unsigned long getConfiguredMask(byte num);                      // get configured mask
+    unsigned long getConfiguredFilter(byte num);                    // get configured filter
 };
 
 #endif

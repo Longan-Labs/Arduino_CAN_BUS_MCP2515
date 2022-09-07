@@ -984,5 +984,55 @@ byte MCP_CAN::isExtendedFrame(void)
 }
 
 /*********************************************************************************************************
+** Function name:           getConfiguredMask
+** Descriptions:            get the configured mask
+***********************************************************************************************************/
+unsigned long MCP_CAN::getConfiguredMask(byte num)
+{
+    unsigned long mask;
+    byte ext;
+    byte mcp_addr = MCP_RXM0SIDH;
+    if (num == 1)
+    {
+        mcp_addr = MCP_RXM1SIDH;
+    }
+    mcp2515_read_id(mcp_addr, &ext, &mask);
+    return mask;
+}
+
+/*********************************************************************************************************
+** Function name:           getConfiguredFilter
+** Descriptions:            get the configured filter
+***********************************************************************************************************/
+unsigned long MCP_CAN::getConfiguredFilter(byte num)
+{
+    unsigned long filter;
+    byte ext;
+    byte mcp_addr = MCP_RXF0SIDH;
+    if (num == 1)
+    {
+        mcp_addr = MCP_RXF1SIDH;
+    }
+    else if (num == 2)
+    {
+        mcp_addr = MCP_RXF2SIDH;
+    }
+    else if (num == 3)
+    {
+        mcp_addr = MCP_RXF3SIDH;
+    }
+    else if (num == 4)
+    {
+        mcp_addr = MCP_RXF4SIDH;
+    }
+    else if (num == 5)
+    {
+        mcp_addr = MCP_RXF5SIDH;
+    }
+    mcp2515_read_id(mcp_addr, &ext, &filter);
+    return filter;
+}
+
+/*********************************************************************************************************
   END FILE
 *********************************************************************************************************/
