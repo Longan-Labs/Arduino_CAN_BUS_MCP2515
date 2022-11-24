@@ -1109,7 +1109,7 @@ INT8U MCP_CAN::sendMsg()
 {
     INT8U res, res1, txbuf_n;
     uint32_t uiTimeOut, temp;
-	
+
     temp = micros();
     // 24 * 4 microseconds typical
     do {
@@ -1121,7 +1121,7 @@ INT8U MCP_CAN::sendMsg()
     {   
         return CAN_GETTXBFTIMEOUT;                                      /* get tx buff time out         */
     }
-    uiTimeOut = micros;
+    uiTimeOut = 0;
     mcp2515_write_canMsg( txbuf_n);
     mcp2515_modifyRegister( txbuf_n-1 , MCP_TXB_TXREQ_M, MCP_TXB_TXREQ_M );
     
@@ -1130,7 +1130,7 @@ INT8U MCP_CAN::sendMsg()
     {       
         res1 = mcp2515_readRegister(txbuf_n-1);                         /* read send buff ctrl reg 	*/
         res1 = res1 & 0x08;
-	uiTimeOut = micros() - temp;
+        uiTimeOut = micros() - temp;
     } while (res1 && (uiTimeOut < TIMEOUTVALUE));   
     
     if(uiTimeOut >= TIMEOUTVALUE)                                       /* send msg timeout             */	
