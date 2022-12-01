@@ -24,6 +24,7 @@
    CANBed 2040      - 9
    CANBed Dual      - 9
    OBD-2G Dev Kit   - 9
+   OBD-II GPS Kit   - 9
    Hud Dev Kit      - 9
 */
 
@@ -89,9 +90,13 @@ void setup()
     Serial.begin(115200);
     while(!Serial);
     
-    // below code need for OBD-II GPS Dev Kit
+    // below code need for OBD-II GPS Dev Kit Atemga32U4 version
     // pinMode(A3, OUTPUT);
     // digitalWrite(A3, HIGH);
+    
+    // below code need for OBD-II GPS Dev Kit RP2040 version
+    // pinMode(12, OUTPUT);
+    // digitalWrite(12, HIGH);
 
     while (CAN_OK != CAN.begin(CAN_500KBPS)) {             // init can bus : baudrate = 500k
         Serial.println("CAN init fail, retry...");
