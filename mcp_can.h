@@ -98,6 +98,7 @@ private:
 public:
     MCP_CAN(byte _CS);
     byte begin(byte speedset);                                      // init can
+    byte begin(int8_t sclk, int8_t miso, int8_t mosi, int8_t ss, byte speedset);// init can with SPI pins
     byte init_Mask(byte num, byte ext, unsigned long ulData);       // init Masks
     byte init_Filt(byte num, byte ext, unsigned long ulData);       // init filters
     byte sendMsgBuf(unsigned long id, byte ext, byte rtr, byte len, byte *buf);     // send buf
@@ -109,6 +110,8 @@ public:
     unsigned long getCanId(void);                                   // get can id when receive
     byte isRemoteRequest(void);                                     // get RR flag when receive
     byte isExtendedFrame(void);                                     // did we recieve 29bit frame?
+    unsigned long getConfiguredMask(byte num);                      // get configured mask
+    unsigned long getConfiguredFilter(byte num);                    // get configured filter
 };
 
 #endif

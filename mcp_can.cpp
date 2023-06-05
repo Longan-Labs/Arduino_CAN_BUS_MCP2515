@@ -621,6 +621,20 @@ byte MCP_CAN::begin(byte speedset)
 }
 
 /*********************************************************************************************************
+** Function name:           init
+** Descriptions:            init can and set SPI pins and CAN speed
+*********************************************************************************************************/
+byte MCP_CAN::begin(int8_t sclk, int8_t miso, int8_t mosi, int8_t ss, byte speedset)
+{
+
+    pinMode(SPICS, OUTPUT);
+    MCP2515_UNSELECT();
+    SPI.begin(sclk, miso, mosi, ss);
+    byte res = mcp2515_init(speedset);
+    return ((res == MCP2515_OK) ? CAN_OK : CAN_FAILINIT);
+}
+
+/*********************************************************************************************************
 ** Function name:           init_Mask
 ** Descriptions:            init canid Masks
 *********************************************************************************************************/
@@ -746,9 +760,10 @@ byte MCP_CAN::init_Filt(byte num, byte ext, unsigned long ulData)
 *********************************************************************************************************/
 byte MCP_CAN::setMsg(unsigned long id, byte ext, byte len, byte rtr, byte *pData)
 {
+    byte tmp = MAX_CHAR_IN_MESSAGE;
     ext_flg     = ext;
     can_id      = id;
-    dta_len     = min(len, MAX_CHAR_IN_MESSAGE);
+    dta_len     = min(len, tmp);
     rtr         = rtr;
     for(int i = 0; i<dta_len; i++)
     {
@@ -966,6 +981,56 @@ byte MCP_CAN::isRemoteRequest(void)
 byte MCP_CAN::isExtendedFrame(void)
 {
     return ext_flg;
+}
+
+/*********************************************************************************************************
+** Function name:           getConfiguredMask
+** Descriptions:            get the configured mask
+***********************************************************************************************************/
+unsigned long MCP_CAN::getConfiguredMask(byte num)
+{
+    unsigned long mask;
+    byte ext;
+    byte mcp_addr = MCP_RXM0SIDH;
+    if (num == 1)
+    {
+        mcp_addr = MCP_RXM1SIDH;
+    }
+    mcp2515_read_id(mcp_addr, &ext, &mask);
+    return mask;
+}
+
+/*********************************************************************************************************
+** Function name:           getConfiguredFilter
+** Descriptions:            get the configured filter
+***********************************************************************************************************/
+unsigned long MCP_CAN::getConfiguredFilter(byte num)
+{
+    unsigned long filter;
+    byte ext;
+    byte mcp_addr = MCP_RXF0SIDH;
+    if (num == 1)
+    {
+        mcp_addr = MCP_RXF1SIDH;
+    }
+    else if (num == 2)
+    {
+        mcp_addr = MCP_RXF2SIDH;
+    }
+    else if (num == 3)
+    {
+        mcp_addr = MCP_RXF3SIDH;
+    }
+    else if (num == 4)
+    {
+        mcp_addr = MCP_RXF4SIDH;
+    }
+    else if (num == 5)
+    {
+        mcp_addr = MCP_RXF5SIDH;
+    }
+    mcp2515_read_id(mcp_addr, &ext, &filter);
+    return filter;
 }
 
 /*********************************************************************************************************
