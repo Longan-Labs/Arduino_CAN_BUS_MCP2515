@@ -26,7 +26,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include <inttypes.h>
+//#include <inttypes.h>
 
 
 // if print debug information
