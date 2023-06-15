@@ -749,7 +749,7 @@ byte MCP_CAN::setMsg(unsigned long id, byte ext, byte len, byte rtr, byte *pData
     ext_flg     = ext;
     can_id      = id;
     //dta_len     = min(len, MAX_CHAR_IN_MESSAGE);
-    dta len = len > MAX_CHAR_IN_MESSAGE ? MAX_CHAR_IN_MESSAGE: len;
+    dta_len = len > MAX_CHAR_IN_MESSAGE ? MAX_CHAR_IN_MESSAGE: len;
     rtr         = rtr;
     for(int i = 0; i<dta_len; i++)
     {
