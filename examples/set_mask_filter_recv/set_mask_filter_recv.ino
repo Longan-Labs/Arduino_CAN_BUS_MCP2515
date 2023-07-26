@@ -1,5 +1,4 @@
 /*  receive a frame from can bus with mask and filter setting
-    support@longan-labs.cc
 
     CAN Baudrate,
     
@@ -44,6 +43,8 @@
    OBD-2G Dev Kit   - 9
    OBD-II GPS Kit   - 9
    Hud Dev Kit      - 9
+
+   Seeed Studio CAN Bus Breakout Board for XIAO and QT Py - 7
 */
 
 #define SPI_CS_PIN  9 
