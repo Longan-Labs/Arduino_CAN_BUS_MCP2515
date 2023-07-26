@@ -1,6 +1,5 @@
 /*  send a frame from can bus
-    support@longan-labs.cc
-    
+
     CAN Baudrate,
     
     #define CAN_5KBPS           1
@@ -21,11 +20,6 @@
     #define CAN_500KBPS         16
     #define CAN_666KBPS         17
     #define CAN_1000KBPS        18
-    
-    CANBed V1: https://www.longan-labs.cc/1030008.html
-    CANBed M0: https://www.longan-labs.cc/1030014.html
-    CAN Bus Shield: https://www.longan-labs.cc/1030016.html
-    OBD-II CAN Bus GPS Dev Kit: https://www.longan-labs.cc/1030003.html
 */
    
 #include <mcp_can.h>
