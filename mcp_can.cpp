@@ -1,8 +1,7 @@
 /*
   mcp_can.cpp
-  2012 Copyright (c) Seeed Technology Inc.  All right reserved.
 
-  Author:Loovee (loovee@seeed.cc)
+  Author:Stephen Lo
   2014-1-16
 
   Contributor:
@@ -23,8 +22,6 @@
   xboxpro1
 
   The MIT License (MIT)
-
-  Copyright (c) 2013 Seeed Technology Inc.
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
