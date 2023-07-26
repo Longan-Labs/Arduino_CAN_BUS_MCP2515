@@ -1,6 +1,5 @@
 /*  receive a frame from can bus
-    support@longan-labs.cc
-   
+
     CAN Baudrate,
     
     #define CAN_5KBPS           1
@@ -41,6 +40,8 @@
    OBD-2G Dev Kit   - 9
    OBD-II GPS Kit   - 9
    Hud Dev Kit      - 9
+
+   Seeed Studio CAN Bus Breakout Board for XIAO and QT Py - 7
 */
 
 
