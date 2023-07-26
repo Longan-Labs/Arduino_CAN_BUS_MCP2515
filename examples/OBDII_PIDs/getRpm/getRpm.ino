@@ -15,7 +15,7 @@
 #include <SPI.h>
 #include "mcp_can.h"
 
-/* Please modify SPI_CS_PIN to adapt to different baords.
+/* Please modify SPI_CS_PIN to adapt to your board.
 
    CANBed V1        - 17
    CANBed M0        - 3
@@ -26,7 +26,7 @@
    OBD-II GPS Kit   - 9
    Hud Dev Kit      - 9
 
-   Seeed Studio CAN Bus Breakout Board for XIAO and QT Py - 7
+   Seeed Studio CAN-Bus Breakout Board for XIAO and QT Py - 7
 */
 
 #define SPI_CS_PIN  9
