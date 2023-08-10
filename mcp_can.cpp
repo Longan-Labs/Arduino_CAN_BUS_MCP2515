@@ -270,6 +270,12 @@ byte MCP_CAN::mcp2515_configRate(const byte canSpeed)
         cfg3 = MCP_16MHz_40kBPS_CFG3;
         break;
 
+        case (CAN_47K619BPS):
+        cfg1 = MCP_16MHz_47k619BPS_CFG1;
+        cfg2 = MCP_16MHz_47k619BPS_CFG2;
+        cfg3 = MCP_16MHz_47k619BPS_CFG3;
+        break;
+
         case (CAN_50KBPS):
         cfg1 = MCP_16MHz_50kBPS_CFG1;
         cfg2 = MCP_16MHz_50kBPS_CFG2;

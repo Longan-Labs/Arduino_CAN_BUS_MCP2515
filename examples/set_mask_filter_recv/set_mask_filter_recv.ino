@@ -9,6 +9,7 @@
     #define CAN_31K25BPS        5
     #define CAN_33KBPS          6
     #define CAN_40KBPS          7
+    #define CAN_47K619BPS       19
     #define CAN_50KBPS          8
     #define CAN_80KBPS          9
     #define CAN_83K3BPS         10
@@ -25,10 +26,7 @@
     CANBed M0: https://www.longan-labs.cc/1030014.html
     CAN Bus Shield: https://www.longan-labs.cc/1030016.html
     OBD-II CAN Bus GPS Dev Kit: https://www.longan-labs.cc/1030003.html
-   
 */
-#include <SPI.h>
-#include "mcp_can.h"
 
 #include <SPI.h>
 #include "mcp_can.h"
