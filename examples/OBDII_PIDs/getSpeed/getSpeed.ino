@@ -13,7 +13,7 @@
 ***************************************************************************************************/
 
 #include <SPI.h>
-#include "mcp_can.h"
+#include <mcp_canbus.h>
 
 /* Please modify SPI_CS_PIN to adapt to your board.
 

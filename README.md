@@ -1,8 +1,10 @@
 # CAN Bus Library 
-
-[![Actions Status](https://github.com/arduino/arduino-cli-example/workflows/test/badge.svg)](https://github.com/arduino/arduino-cli-example/actions)
-[![Spell Check](https://github.com/arduino/compile-sketches/workflows/Spell%20Check/badge.svg)](https://github.com/arduino/compile-sketches/actions?workflow=Spell+Check)
-[![codecov](https://codecov.io/gh/arduino/compile-sketches/branch/main/graph/badge.svg?token=Uv6f1ebMZ4)](https://codecov.io/gh/arduino/compile-sketches)
+[![GitHub](https://img.shields.io/github/license/Longan-Labs/Arduino_CAN_BUS_MCP2515)](https://github.com/Longan-Labs/Arduino_CAN_BUS_MCP2515/blob/master/LICENSE)
+[![Installation instructions](https://www.ardu-badge.com/badge/mcp_canbus.svg?)](https://www.ardu-badge.com/mcp_canbus)
+[![GitHub version](https://img.shields.io/github/release/Longan-Labs/Arduino_CAN_BUS_MCP2515.svg?logo=github&logoColor=ffffff)](https://github.com/Longan-Labs/Arduino_CAN_BUS_MCP2515/releases/latest)
+[![GitHub Release Date](https://img.shields.io/github/release-date/Longan-Labs/Arduino_CAN_BUS_MCP2515.svg?logo=github&logoColor=ffffff)](https://github.com/Longan-Labs/Arduino_CAN_BUS_MCP2515/releases/latest)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Longan-Labs/Arduino_CAN_BUS_MCP2515?logo=github&logoColor=ffffff)](https://github.com/Longan-Labs/Arduino_CAN_BUS_MCP2515/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/Longan-Labs/Arduino_CAN_BUS_MCP2515.svg?logo=github&logoColor=ffffff)](https://github.com/Longan-Labs/Arduino_CAN_BUS_MCP2515/issues)
 
 Arduino library for MCP2515, it's available for most of theArduino boards, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
 
@@ -118,32 +120,6 @@ If you need a Dev board, plese try,
 - [CANBed V1](https://www.longan-labs.cc/1030008.html)
 - [CANBed M0](https://www.longan-labs.cc/1030014.html)
 - [OBD-II CAN Bus GPS Dev Kit](https://www.longan-labs.cc/1030003.html)
-
-## License
-
-```
-MIT License
-
-Copyright (c) 2018 @ Longan Labs
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
 
 ## Contact us
 

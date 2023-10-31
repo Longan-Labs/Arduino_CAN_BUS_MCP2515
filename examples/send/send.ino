@@ -22,7 +22,7 @@
     #define CAN_1000KBPS        18
 */
    
-#include <mcp_can.h>
+#include <mcp_canbus.h>
 #include <SPI.h>
 
 /* Please modify SPI_CS_PIN to adapt to your board.
