@@ -38,7 +38,13 @@ You can also read [how to install mcp_canbus library](https://www.ardu-badge.com
 * [**keywords.txt**](./keywords.txt) - Keywords from this library that will be highlighted in the Arduino IDE.
 * [**library.properties**](./library.properties) - General library properties for the Arduino package manager.
 
-## Functions
+## How to use
+### Header
+```
+#include <mcp_canbus.h>
+```
+
+### Functions
 
 - begin()
 - init_Mask()
@@ -51,7 +57,7 @@ You can also read [how to install mcp_canbus library](https://www.ardu-badge.com
 - isRemoteRequest()
 - isExtendedFrame()
 
-## Examples
+### Examples
 
 here are many examples implemented in this library. One of the examples is below. You can find other examples [here](./examples)
 
@@ -86,7 +92,7 @@ here are many examples implemented in this library. One of the examples is below
     OBD-II CAN Bus GPS Dev Kit: https://www.longan-labs.cc/1030003.html
 */
    
-#include <mcp_can.h>
+#include <mcp_canbus.h>
 #include <SPI.h>
 
 const int SPI_CS_PIN = 17;              // CANBed V1
