@@ -17,9 +17,19 @@ With this library, you can,
 
 ## Installation
 
-1. [Download the library](https://github.com/Longan-Labs/Aruino_CAN_BUS_MCP2515/archive/refs/heads/master.zip)
+You can install it similiar to any other Arduino libraries, using the Library Manager or from a Zip file in the Arduino IDE.
+
+- Install using the Library Manager
+1. In the Arduino IDE, navigate to Sketch > Include Library > Manage Libraries...
+2. Search for "mcp_canbus" to find this library
+3. Click "INSTALL"
+
+- Install from a Zip file
+1. [Download this library](https://github.com/Longan-Labs/Aruino_CAN_BUS_MCP2515/archive/refs/heads/master.zip)
 2. Extract the zip file
-3. In the Arduino IDe, navigate to Sketch > Include Library > Add .ZIP Library
+3. In the Arduino IDE, navigate to Sketch > Include Library > Add .ZIP Library
+
+You can also read [how to install mcp_canbus library](https://www.ardu-badge.com/mcp_canbus) for a reference.
 
 ## Respository Contents
 
