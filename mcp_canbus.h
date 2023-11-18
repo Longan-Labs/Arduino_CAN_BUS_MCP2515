@@ -108,7 +108,7 @@ public:
     byte checkError(void);                                          // if something error
     unsigned long getCanId(void);                                   // get can id when receive
     byte isRemoteRequest(void);                                     // get RR flag when receive
-    byte isExtendedFrame(void);                                     // did we recieve 29bit frame?
+    byte isExtendedFrame(void);                                     // did we receive 29bit frame?
 };
 
 #endif

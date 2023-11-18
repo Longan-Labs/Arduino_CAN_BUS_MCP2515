@@ -131,8 +131,8 @@
 #define MCP_RXB0SIDH    0x61
 #define MCP_RXB1CTRL    0x70
 #define MCP_RXB1SIDH    0x71
-#define MCP_TX_INT      0x1C                                    // Enable all transmit interrup ts
-#define MCP_TX01_INT    0x0C                                    // Enable TXB0 and TXB1 interru pts
+#define MCP_TX_INT      0x1C                                    // Enable all transmit interrupts
+#define MCP_TX01_INT    0x0C                                    // Enable TXB0 and TXB1 interrupts
 #define MCP_RX_INT      0x03                                    // Enable receive interrupts
 #define MCP_NO_INT      0x00                                    // Disable all interrupts
 

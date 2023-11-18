@@ -17,7 +17,7 @@ With this library, you can,
 
 ## Installation
 
-You can install it similiar to any other Arduino libraries, using the Library Manager or from a Zip file in the Arduino IDE.
+You can install it similar to any other Arduino libraries, using the Library Manager or from a Zip file in the Arduino IDE.
 
 - Install using the Library Manager
 1. In the Arduino IDE, navigate to Sketch > Include Library > Manage Libraries...
@@ -31,7 +31,7 @@ You can install it similiar to any other Arduino libraries, using the Library Ma
 
 You can also read [how to install mcp_canbus library](https://www.ardu-badge.com/mcp_canbus) for a reference.
 
-## Respository Contents
+## Repository Contents
 
 * [**/examples**](./examples) - Example sketches for the library (.ino). Run these from the Arduino IDE.
 * [**/src**](./src) - Source files for the library (.cpp, .h).
@@ -130,7 +130,7 @@ void loop()
 
 ## Get a Dev Board
 
-If you need a Dev board, plese try,
+If you need a Dev board, please try,
 
 - [CAN Bus Shield for Arduino](https://www.longan-labs.cc/1030016.html)
 - [CANBed V1](https://www.longan-labs.cc/1030008.html)
